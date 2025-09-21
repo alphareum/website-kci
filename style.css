@@ -129,6 +129,11 @@ nav {
     transition: var(--transition);
 }
 
+.nav-link:visited {
+    color: var(--black);
+    text-decoration: none;
+}
+
 .nav-link::after {
     content: '';
     position: absolute;
