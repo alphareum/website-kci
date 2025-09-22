@@ -188,6 +188,37 @@ nav {
     overflow: hidden;
 }
 
+.dragon-ornament {
+    position: absolute;
+    top: 2.5rem;
+    right: 8%;
+    color: var(--gold);
+    opacity: 0.28;
+    pointer-events: none;
+    z-index: 1;
+    transform-origin: top right;
+}
+
+.dragon-ornament svg {
+    display: block;
+    width: clamp(180px, 24vw, 260px);
+    height: auto;
+    animation: dragonPulse 18s ease-in-out infinite;
+    transform-origin: center;
+}
+
+@media (max-width: 1024px) {
+    .dragon-ornament {
+        top: 2rem;
+        right: 4%;
+        opacity: 0.24;
+    }
+
+    .dragon-ornament svg {
+        width: clamp(150px, 28vw, 220px);
+    }
+}
+
 .hero::before {
     content: '';
     position: absolute;
@@ -204,6 +235,15 @@ nav {
 @keyframes float {
     0%, 100% { transform: translateY(0) rotate(0deg); }
     50% { transform: translateY(-30px) rotate(180deg); }
+}
+
+@keyframes dragonPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
 }
 
 .hero-content {
@@ -840,6 +880,16 @@ footer {
         transform: rotate(-45deg) translate(5px, -5px);
     }
 
+    .dragon-ornament {
+        top: 1rem;
+        right: -16px;
+        opacity: 0.18;
+    }
+
+    .dragon-ornament svg {
+        width: 140px;
+    }
+
     .hero h1 {
         font-size: 2.5rem;
     }
@@ -867,6 +917,12 @@ footer {
     
     .sponsor-card {
         flex: 0 0 200px;
+    }
+}
+
+@media (max-width: 600px) {
+    .dragon-ornament {
+        display: none;
     }
 }
 
