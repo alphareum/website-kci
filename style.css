@@ -212,9 +212,49 @@ nav {
     z-index: 2;
 }
 
+.dragon-ornament {
+    position: absolute;
+    top: -60px;
+    right: 60px;
+    width: 220px;
+    color: var(--gold);
+    opacity: 0.45;
+    pointer-events: none;
+    animation: dragonPulse 18s ease-in-out infinite;
+    transform-origin: center;
+}
+
+.dragon-ornament svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.dragon-ornament path {
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.12));
+}
+
 .hero-content > :not(.floating-lanterns) {
     position: relative;
     z-index: 1;
+}
+
+@keyframes dragonPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@media (max-width: 1024px) {
+    .dragon-ornament {
+        width: 160px;
+        top: -40px;
+        right: 30px;
+        opacity: 0.35;
+    }
 }
 
 .floating-lanterns {
@@ -936,6 +976,10 @@ footer {
 
     .menu-toggle.active span:nth-child(3) {
         transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    .dragon-ornament {
+        display: none;
     }
 
     .hero h1 {
