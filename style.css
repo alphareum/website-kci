@@ -212,6 +212,104 @@ nav {
     z-index: 2;
 }
 
+.hero-content > :not(.floating-lanterns) {
+    position: relative;
+    z-index: 1;
+}
+
+.floating-lanterns {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.floating-lanterns .lantern {
+    position: absolute;
+    width: 90px;
+    height: 110px;
+    border-radius: 45% 45% 40% 40%;
+    background: linear-gradient(180deg, var(--primary-red) 0%, var(--deep-red) 100%);
+    box-shadow: 0 0 25px 0 var(--primary-red);
+    animation: lanternFloat 18s ease-in-out infinite;
+}
+
+.floating-lanterns .lantern::before {
+    content: '';
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 14px;
+    background: var(--gold);
+    border-radius: 6px;
+    box-shadow: 0 0 10px 0 var(--gold);
+}
+
+.floating-lanterns .lantern::after {
+    content: '';
+    position: absolute;
+    bottom: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 40px;
+    background: linear-gradient(180deg, var(--gold) 0%, transparent 100%);
+    border-radius: 10px;
+    box-shadow: 0 15px 0 0 var(--primary-red);
+}
+
+.floating-lanterns .lantern:nth-child(1) {
+    top: -20px;
+    left: 12%;
+    animation-delay: 0s;
+}
+
+.floating-lanterns .lantern:nth-child(2) {
+    top: 40px;
+    left: calc(50% - 45px);
+    animation-delay: 4s;
+}
+
+.floating-lanterns .lantern:nth-child(3) {
+    top: -10px;
+    right: 18%;
+    animation-delay: 8s;
+}
+
+@media (max-width: 900px) {
+    .floating-lanterns .lantern {
+        width: 70px;
+        height: 90px;
+    }
+
+    .floating-lanterns .lantern:nth-child(2) {
+        left: calc(50% - 35px);
+    }
+}
+
+@keyframes lanternFloat {
+    0% {
+        transform: translateY(30px) scale(0.98) rotate(-2deg);
+    }
+    33% {
+        transform: translateY(0) scale(1) rotate(2deg);
+    }
+    66% {
+        transform: translateY(-25px) scale(1.02) rotate(-1deg);
+    }
+    100% {
+        transform: translateY(30px) scale(0.98) rotate(3deg);
+    }
+}
+
+@media (max-width: 600px) {
+    .floating-lanterns {
+        display: none;
+    }
+}
+
 .chinese-border {
     width: 100px;
     height: 2px;
