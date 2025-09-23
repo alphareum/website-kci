@@ -638,10 +638,21 @@ nav {
     animation: fadeInUp 0.8s ease 0.6s forwards;
 }
 
+.social-link svg {
+    width: 28px;
+    height: 28px;
+    color: var(--primary-red);
+    transition: var(--transition);
+}
+
 .social-link:hover {
     background: var(--primary-red);
     border-color: var(--primary-red);
     transform: translateY(-5px) rotate(360deg);
+}
+
+.social-link:hover svg {
+    color: var(--white);
 }
 
 /* ===== SPONSOR SECTION - HORIZONTAL SCROLL ===== */
