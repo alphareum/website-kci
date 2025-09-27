@@ -17,10 +17,8 @@ and migrate the services to use the hosted tables.
    npm run dev:api
    ```
 
-Visiting `http://localhost:3000/` returns a quick status document with the
-available entry points. All CMS functionality lives under the `/api/*` prefix,
-and `http://localhost:3000/healthz` is available for monitoring checks. Default
-admin credentials are `admin@example.com` with password `changeMe123`.
+```
+
 
 ## Tests
 ```bash
