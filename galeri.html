@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Galeri — Komunitas Chinese Indonesia</title>
+  <meta name="description" content="Dokumentasi kegiatan Komunitas Chinese Indonesia (KCI)."/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <!-- Background pattern -->
+  <div class="pattern-overlay"></div>
+
+  <!-- Header (same structure as site) -->
+  <header id="header">
+    <nav class="container nav-container">
+      <div class="logo-section">
+        <div class="logo-text">
+          <span class="logo-main">KCI</span>
+          <span class="logo-sub">Komunitas Chinese Indonesia</span>
+        </div>
+      </div>
+
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="index.html#beranda" class="nav-link">Beranda</a></li>
+        <li><a href="index.html#visi-misi" class="nav-link">Visi Misi</a></li>
+        <li><a href="tentang_kci.html" class="nav-link">Tentang</a></li>
+        <li><a href="index.html#acara" class="nav-link">Acara</a></li>
+        <li><a href="galeri.html" class="nav-link">Galeri</a></li>
+        <li><a href="index.html#testimoni" class="nav-link">Testimoni</a></li>
+        <li><a href="index.html#kontak" class="nav-link">Kontak</a></li>
+        <li><a href="index.html#sponsor" class="nav-link">Partner</a></li>
+        <li><button class="theme-toggle" id="themeToggle">🌓</button></li>
+      </ul>
+
+      <div class="menu-toggle" id="menuToggle">
+        <span></span><span></span><span></span>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-content">
+      <div class="chinese-border"></div>
+      <h1>Galeri KCI</h1>
+      <p class="hero-subtitle">Dokumentasi kegiatan & kebersamaan komunitas</p>
+    </div>
+  </section>
+
+  <!-- Breadcrumb -->
+  <section class="section" style="padding-top:40px; padding-bottom:0;">
+    <div class="container" style="color: var(--gray); font-size: 0.95rem;">
+      <span><a class="nav-link" href="index.html" style="padding:0; font-weight:600;">Beranda</a> › Galeri</span>
+    </div>
+  </section>
+
+  <!-- Dokumentasi -->
+<section class="section section-alt" id="dokumentasi">
+  <!-- Scoped gallery fixes -->
+  <style>
+    /* keep changes local to this page section */
+    #dokumentasi img{max-width:100%;height:auto;transform:none!important;}
+    #dokumentasi .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;}
+    #dokumentasi .gallery-card{background:var(--white);border:1px solid var(--border-color);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);}
+    #dokumentasi .gallery-image{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--light-gray);}
+    #dokumentasi .gallery-caption{padding:14px 16px;color:var(--gray);}
+    @media (max-width:520px){#dokumentasi .gallery-grid{gap:16px;}}
+  </style>
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Dokumentasi</h2>
+      <div class="chinese-border"></div>
+      <p class="section-subtitle">Kumpulan momen kegiatan Komunitas Chinese Indonesia</p>
+    </div>
+
+    <div class="gallery-grid">
+      <!-- Card 1 -->
+      <figure class="gallery-card">
+        <img class="gallery-image" src="/assets/events/basketbersamakci.jpg" alt="Basket bersama KCI" width="1600" height="1200" loading="lazy" decoding="async"/>
+        <figcaption class="gallery-caption">
+          <h3>Basket Bersama KCI</h3>
+          <p>Kebersamaan melalui olahraga bareng.</p>
+        </figcaption>
+      </figure>
+
+      <!-- Card 2 -->
+      <figure class="gallery-card">
+        <img class="gallery-image" src="/assets/events/nontonbersamakci.jpg" alt="Nonton bersama KCI" width="1600" height="1200" loading="lazy" decoding="async"/>
+        <figcaption class="gallery-caption">
+          <h3>Nonton Bersama</h3>
+          <p>Menikmati film bareng komunitas.</p>
+        </figcaption>
+      </figure>
+
+      <!-- Card 3 -->
+      <figure class="gallery-card">
+        <img class="gallery-image" src="/assets/events/zoombersamakci.jpg" alt="Zoom bersama KCI" width="1600" height="1200" loading="lazy" decoding="async"/>
+        <figcaption class="gallery-caption">
+          <h3>Zoom Bersama</h3>
+          <p>Diskusi daring & koordinasi acara.</p>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+  <!-- CTA Join -->
+  <section class="section" style="background: linear-gradient(135deg, var(--primary-red), var(--deep-red)); color: white; text-align: center;">
+    <div class="container">
+      <h2 style="color: white; font-size: 2.2rem; margin-bottom: 1rem;">Bergabunglah Dengan Kami</h2>
+      <div class="chinese-border" style="background: white; margin-bottom: 1.5rem;"></div>
+      <p style="max-width: 680px; margin: 0 auto 1.8rem; font-size: 1.1rem;">
+        Jadi bagian dari keluarga KCI, tempat bertumbuh, berkarya, dan berbagi.
+      </p>
+      <a href="https://bit.ly/3TwZt9W" target="_blank" class="cta-button" style="background: white; color: var(--primary-red);">
+        Daftar Sekarang
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Komunitas Chinese Indonesia</h3>
+          <p>文化连心，共创未来</p>
+        </div>
+        <div class="footer-section">
+          <h3>Tautan Cepat</h3>
+          <p><a href="index.html#visi-misi">Visi & Misi</a></p>
+          <p><a href="index.html#acara">Acara</a></p>
+          <p><a href="galeri.html">Galeri</a></p>
+          <p><a href="index.html#kontak">Kontak</a></p>
+        </div>
+        <div class="footer-section">
+          <h3>Hubungi Kami</h3>
+          <p>Founder: 0878-8492-4385</p>
+          <p>Admin: 0856-4187-7775</p>
+          <p>Instagram: @komunitaschineseindonesia</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Komunitas Chinese Indonesia. All rights reserved.</p>
+        <p>Unity in Diversity - Bhinneka Tunggal Ika</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll to Top -->
+  <button class="scroll-top" id="scrollTop">↑</button>
+
+  <script src="script.js"></script>
+</body>
+</html>
