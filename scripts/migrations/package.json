@@ -1,0 +1,17 @@
+{
+  "name": "migration-tools",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "extract": "tsx src/extract.ts"
+  },
+  "dependencies": {
+    "mysql2": "^3.10.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "tsx": "^4.7.2",
+    "typescript": "^5.4.5"
+  }
+}
