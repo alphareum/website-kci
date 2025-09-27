@@ -1,20 +1,16 @@
-# Website KCI
+# KCI CMS – Fastify JSON API (JavaScript)
 
-This repository now hosts both the legacy PHP site and the staged JavaScript rewrite.
+Lightweight CMS API with session auth and JSON-backed storage for local testing and migration.
 
-## Structure
-- `legacy/php` – Archived PHP CMS and static site that remain available for reference.
-- `apps/api` – Fastify + TypeScript backend that exposes CMS capabilities over REST
-  while persisting to JSON files by default. Supabase integration can be enabled
-  later by providing credentials.
-- `scripts/migrations` – Tooling to extract data from the MySQL database.
-- `supabase` – Schema definition for the future Postgres storage layer.
-- `docs` – Architecture notes and the staged migration plan.
+## Requirements
+- Node.js 18+ (LTS recommended)
+- npm
 
-## Getting started with the JS stack
-1. Install dependencies from the repo root: `npm install`
-2. Copy `apps/api/.env.example` to `apps/api/.env` and adjust settings if needed.
-3. Start the API: `npm run dev:api`
+## Quick Start
 
+```bash
+# from repo root
+npm install
+cp apps/api/.env.example apps/api/.env
+# (Windows PowerShell: Copy-Item apps/api/.env.example apps/api/.env)
 
-Refer to `docs/MIGRATION_PLAN.md` for the rollout strategy.
