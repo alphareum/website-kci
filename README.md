@@ -16,7 +16,5 @@ This repository now hosts both the legacy PHP site and the staged JavaScript rew
 2. Copy `apps/api/.env.example` to `apps/api/.env` and adjust settings if needed.
 3. Start the API: `npm run dev:api`
 
-Default admin credentials are `admin@example.com` / `changeMe123`. Data persists to
-`apps/api/data` so you can get the CMS running without provisioning Supabase.
 
 Refer to `docs/MIGRATION_PLAN.md` for the rollout strategy.

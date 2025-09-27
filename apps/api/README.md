@@ -17,8 +17,8 @@ and migrate the services to use the hosted tables.
    npm run dev:api
    ```
 
-The server exposes routes under `/api/*` plus `/healthz` for monitoring. Default
-admin credentials are `admin@example.com` with password `changeMe123`.
+```
+
 
 ## Tests
 ```bash
