@@ -1,5 +1,7 @@
 import { z } from 'zod';
-import { getSupabaseClient } from '../../lib/supabase.js';
+import { nextId, readTable, writeTable } from '../../lib/json-store.js';
+
+const TABLE = 'events';
 
 export const EventSchema = z.object({
   id: z.number().int().positive(),
@@ -26,32 +28,48 @@ export const UpsertEventSchema = EventSchema.partial({
 
 export type UpsertEventInput = z.infer<typeof UpsertEventSchema>;
 
+function buildEventRecord(id: number, input: UpsertEventInput, existing?: EventRecord): EventRecord {
+  return {
+    id,
+    title: input.title ?? existing?.title ?? '',
+    slug: input.slug ?? existing?.slug ?? '',
+    summary: input.summary ?? existing?.summary ?? null,
+    description: input.description ?? existing?.description ?? null,
+    location: input.location ?? existing?.location ?? null,
+    starts_at: input.starts_at ?? existing?.starts_at ?? new Date().toISOString(),
+    ends_at: input.ends_at ?? existing?.ends_at ?? null,
+    hero_image_url: input.hero_image_url ?? existing?.hero_image_url ?? null,
+    is_published: input.is_published ?? existing?.is_published ?? false,
+  };
+}
+
 export class EventsService {
-  private client = getSupabaseClient();
-
   async listPublished() {
-    const { data, error } = await this.client
-      .from('events')
-      .select('*')
-      .eq('is_published', true)
-      .order('starts_at', { ascending: true });
-
-    if (error) throw error;
-
-    return z.array(EventSchema).parse(data ?? []);
+    const events = await readTable<EventRecord>(TABLE);
+    const published = events.filter((event) => event.is_published);
+    published.sort((a, b) => a.starts_at.localeCompare(b.starts_at));
+    return z.array(EventSchema).parse(published);
   }
 
   async upsertEvent(input: UpsertEventInput) {
     const payload = UpsertEventSchema.parse(input);
+    const events = await readTable<EventRecord>(TABLE);
 
-    const { data, error } = await this.client
-      .from('events')
-      .upsert(payload)
-      .select()
-      .single();
+    if (payload.id) {
+      const existing = events.find((event) => event.id === payload.id);
+      if (!existing) {
+        throw new Error('Event not found');
+      }
+      const updated = buildEventRecord(existing.id, payload, existing);
+      const nextEvents = events.map((event) => (event.id === updated.id ? updated : event));
+      await writeTable(TABLE, nextEvents);
+      return EventSchema.parse(updated);
+    }
 
-    if (error) throw error;
-
-    return EventSchema.parse(data);
+    const newId = nextId(events);
+    const record: EventRecord = buildEventRecord(newId, payload);
+    const nextEvents = [...events, record];
+    await writeTable(TABLE, nextEvents);
+    return EventSchema.parse(record);
   }
 }

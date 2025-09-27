@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { AuthService, CredentialsSchema } from './service.js';
+import { AuthService, CredentialsSchema, InvalidCredentialsError } from './service.js';
 
 export async function authRoutes(server: FastifyInstance) {
   const service = new AuthService();
@@ -10,7 +10,14 @@ export async function authRoutes(server: FastifyInstance) {
 
   server.post('/login', async (request) => {
     const credentials = CredentialsSchema.parse(request.body);
-    const session = await service.verifyCredentials(credentials);
-    return { session };
+    try {
+      const session = await service.verifyCredentials(credentials);
+      return { session };
+    } catch (error) {
+      if (error instanceof InvalidCredentialsError) {
+        throw server.httpErrors.unauthorized('Invalid email or password');
+      }
+      throw error;
+    }
   });
 }
