@@ -1,9 +1,13 @@
-# KCI API (Fastify + Supabase)
+# KCI API (Fastify)
 
-This service exposes the CMS capabilities over a typed Fastify API.
+This service exposes the CMS capabilities over a typed Fastify API. By default it
+persists data to JSON files so the CMS can run without any external database.
+When you're ready to plug in Supabase, provide the credentials in the `.env` file
+and migrate the services to use the hosted tables.
 
 ## Getting started
-1. Copy `.env.example` to `.env` and fill in Supabase credentials.
+1. Copy `.env.example` to `.env` and adjust the `DATA_DIR` if needed. Supabase
+   variables are optional until you provision the project.
 2. Install dependencies from the repo root:
    ```bash
    npm install
@@ -13,7 +17,8 @@ This service exposes the CMS capabilities over a typed Fastify API.
    npm run dev:api
    ```
 
-The server exposes routes under `/api/*` plus `/healthz` for monitoring.
+The server exposes routes under `/api/*` plus `/healthz` for monitoring. Default
+admin credentials are `admin@example.com` with password `changeMe123`.
 
 ## Tests
 ```bash

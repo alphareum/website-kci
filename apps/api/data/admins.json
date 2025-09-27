@@ -1,0 +1,10 @@
+[
+  {
+    "id": 1,
+    "email": "admin@example.com",
+    "full_name": "Site Owner",
+    "role": "owner",
+    "password_hash": "4a98bb1c913a03d6203767ac889f8ac5:4aaf84c777cea6191b38ecde83dc51b1ce809c853986e2c720c84c2d48795b8ed7827177c52374696131fa71ed2d47c9c42925027524e8d3432d83e959eebecb",
+    "last_login_at": null
+  }
+]

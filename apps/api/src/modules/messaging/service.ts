@@ -1,5 +1,7 @@
 import { z } from 'zod';
-import { getSupabaseClient } from '../../lib/supabase.js';
+import { nextId, readTable, writeTable } from '../../lib/json-store.js';
+
+const TABLE = 'messages';
 
 export const MessageSchema = z.object({
   id: z.number().int().positive(),
@@ -22,30 +24,27 @@ export type MessageRecord = z.infer<typeof MessageSchema>;
 export type CreateMessageInput = z.infer<typeof CreateMessageSchema>;
 
 export class MessagingService {
-  private client = getSupabaseClient();
-
   async listMessages() {
-    const { data, error } = await this.client
-      .from('messages')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (error) throw error;
-
-    return z.array(MessageSchema).parse(data ?? []);
+    const rows = await readTable<MessageRecord>(TABLE);
+    rows.sort((a, b) => b.created_at.localeCompare(a.created_at));
+    return z.array(MessageSchema).parse(rows);
   }
 
   async createMessage(input: CreateMessageInput) {
     const payload = CreateMessageSchema.parse(input);
+    const rows = await readTable<MessageRecord>(TABLE);
+    const record: MessageRecord = {
+      id: nextId(rows),
+      sender_name: payload.sender_name,
+      sender_email: payload.sender_email,
+      subject: payload.subject ?? null,
+      body: payload.body,
+      created_at: new Date().toISOString(),
+      status: 'new',
+    };
 
-    const { data, error } = await this.client
-      .from('messages')
-      .insert(payload)
-      .select()
-      .single();
-
-    if (error) throw error;
-
-    return MessageSchema.parse(data);
+    rows.push(record);
+    await writeTable(TABLE, rows);
+    return MessageSchema.parse(record);
   }
 }
