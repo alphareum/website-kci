@@ -1,0 +1,31 @@
+[
+  {
+    "id": 1,
+    "type": "gallery",
+    "title": "Kereta Komuter",
+    "description": "Peremajaan armada KRL Jabodetabek.",
+    "asset_url": "https://images.example.com/gallery/krl-revamp.jpg",
+    "metadata": {
+      "alt": "KRL baru"
+    },
+    "created_at": "2024-01-05T08:30:00.000Z"
+  },
+  {
+    "id": 2,
+    "type": "testimonial",
+    "title": "Pengguna KCI",
+    "description": "Pelayanan semakin baik setiap harinya!",
+    "asset_url": "https://images.example.com/testimonial/customer-1.jpg",
+    "metadata": null,
+    "created_at": "2024-02-14T03:21:00.000Z"
+  },
+  {
+    "id": 3,
+    "type": "partner",
+    "title": "PT KAI",
+    "description": "Sinergi layanan perkeretaapian nasional.",
+    "asset_url": "https://images.example.com/partners/pt-kai.png",
+    "metadata": null,
+    "created_at": "2024-03-01T10:00:00.000Z"
+  }
+]
