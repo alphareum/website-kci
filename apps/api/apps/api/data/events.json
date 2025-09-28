@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "title": "a",
+    "slug": "b",
+    "summary": "c",
+    "description": "d",
+    "location": "e",
+    "starts_at": "2025-09-28T06:11:00.000Z",
+    "ends_at": null,
+    "hero_image_url": null,
+    "is_published": false
+  },
+  {
+    "id": 2,
+    "title": "a",
+    "slug": "b",
+    "summary": "c",
+    "description": "d",
+    "location": "e",
+    "starts_at": "2025-09-28T06:11:00.000Z",
+    "ends_at": null,
+    "hero_image_url": null,
+    "is_published": true
+  },
+  {
+    "id": 3,
+    "title": "nama event ",
+    "slug": "slug",
+    "summary": "kegiatan event",
+    "description": "deskripsi event",
+    "location": "lokasi",
+    "starts_at": "2025-09-28T07:52:00.000Z",
+    "ends_at": null,
+    "hero_image_url": "https://alphareum.github.io",
+    "is_published": true
+  },
+  {
+    "id": 4,
+    "title": "ab",
+    "slug": "aa",
+    "summary": "aa",
+    "description": "aa",
+    "location": "aa",
+    "starts_at": "2025-09-28T13:41:00.000Z",
+    "ends_at": null,
+    "hero_image_url": null,
+    "is_published": true
+  }
+]
