@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-api-base="/api">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -98,10 +98,12 @@
                 <p class="section-subtitle">Berbagai kegiatan komunitas yang mempererat persaudaraan</p>
             </div>
 
-            <div class="events-placeholder">
+            <div class="dynamic-grid" data-events-list hidden></div>
+            <div class="dynamic-placeholder" data-events-empty>
                 <p>Acara dan kegiatan akan segera diperbarui</p>
                 <p>Pantau terus perkembangan terbaru dari komunitas kami</p>
             </div>
+            <div class="dynamic-error" data-events-error hidden></div>
         </div>
     </section>
 
@@ -136,10 +138,12 @@
                 <p class="section-subtitle">Cerita dan pengalaman dari anggota komunitas kami</p>
             </div>
 
-            <div class="testimonials-placeholder">
+            <div class="dynamic-grid dynamic-grid--testimonials" data-testimonials-list hidden></div>
+            <div class="dynamic-placeholder" data-testimonials-empty>
                 <p>Testimoni dari anggota akan segera ditampilkan</p>
                 <p>Bagikan pengalaman Anda bersama KCI</p>
             </div>
+            <div class="dynamic-error" data-testimonials-error hidden></div>
         </div>
     </section>
 
@@ -203,7 +207,7 @@
     <div class="social-container" style="text-align:center;margin-top:24px;">
       <h3 style="color: var(--black); margin-bottom: 10px;">Media Sosial</h3>
       <p style="color: var(--gray);">Ikuti perkembangan terbaru dari komunitas kami</p>
-      <div class="social-links">
+      <div class="social-links" data-social-links>
         <!-- Instagram -->
         <a
           href="https://instagram.com/komunitaschineseindonesia"
@@ -229,6 +233,7 @@
           </svg>
         </a>
       </div>
+      <div class="dynamic-error dynamic-error--inline" data-social-error hidden></div>
     </div>
   </div>
 </section>
@@ -242,108 +247,12 @@
                 <p class="section-subtitle">Terima kasih kepada mitra yang mendukung komunitas kami</p>
             </div>
 
-            <!-- Business Partners -->
-            <div class="sponsor-section">
-                <h3 class="sponsor-category-title">📚 Business Partners</h3>
-                <div class="sponsor-carousel-container">
-                    <button class="carousel-btn carousel-btn-left" id="businessLeft">‹</button>
-                    <div class="sponsor-carousel" id="businessCarousel">
-                        <div class="sponsor-track">
-                            <a class="sponsor-card" href="https://www.instagram.com/kencana_property112" target="_blank" rel="noopener noreferrer">
-                                <div class="sponsor-logo">
-                                    <img src="/assets/partners/business/kencanaproperty.jpg" alt="Kencana Property" loading="lazy">
-                                </div>
-                                <h4 class="sponsor-name">KENCANA PROPERTY</h4>
-                            </a>
-
-                            <a class="sponsor-card" href="https://www.instagram.com/marketphone70" target="_blank" rel="noopener noreferrer">
-                                <div class="sponsor-logo">
-                                    <img src="/assets/partners/business/marketphone.jpg" alt="Market Phone" loading="lazy">
-                                </div>
-                                <h4 class="sponsor-name">MARKET PHONE</h4>
-                            </a>
-
-                            <div class="sponsor-card">
-                                <div class="sponsor-logo">
-                                    <img src="/assets/partners/business/accumart.jpg" alt="Accumart Jogja" loading="lazy">
-                                </div>
-                                <h4 class="sponsor-name">ACCUMART JOGJA</h4>
-                            </div>
-
-                            <a class="sponsor-card" href="https://www.instagram.com/basreng_domini" target="_blank" rel="noopener noreferrer">
-                                <div class="sponsor-logo">
-                                    <img src="/assets/partners/business/basrengdomini.jpg" alt="Basreng Domini" loading="lazy">
-                                </div>
-                                <h4 class="sponsor-name">BASRENG DOMINI</h4>
-                            </a>
-
-                            <!-- Placeholder cards for future sponsors -->
-                            <div class="sponsor-card placeholder">
-                                <div class="sponsor-logo">
-                                    <span class="placeholder-icon">+</span>
-                                </div>
-                                <h4 class="sponsor-name muted">Coming Soon</h4>
-                            </div>
-
-                            <div class="sponsor-card placeholder">
-                                <div class="sponsor-logo">
-                                    <span class="placeholder-icon">+</span>
-                                </div>
-                                <h4 class="sponsor-name muted">Coming Soon</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="carousel-btn carousel-btn-right" id="businessRight">›</button>
-                </div>
+            <div class="dynamic-grid dynamic-grid--partners" data-partners-list hidden></div>
+            <div class="dynamic-placeholder" data-partners-empty>
+                <p>Daftar mitra akan segera diperbarui.</p>
+                <p>Hubungi kami untuk berkolaborasi dengan KCI.</p>
             </div>
-
-            <!-- Community Partners -->
-            <div class="sponsor-section">
-                <h3 class="sponsor-category-title">🤝 Community Partners</h3>
-                <div class="sponsor-carousel-container">
-                    <button class="carousel-btn carousel-btn-left" id="communityLeft">‹</button>
-                    <div class="sponsor-carousel" id="communityCarousel">
-                        <div class="sponsor-track">
-                            <a class="sponsor-card" href="https://www.instagram.com/komunitasberbagiyogyakarta" target="_blank" rel="noopener noreferrer">
-                                <div class="sponsor-logo">
-                                    <img src="/assets/partners/community/komunitasberbagiyogyakarta.jpg" alt="Komunitas Berbagi Yogyakarta" loading="lazy">
-                                </div>
-                                <h4 class="sponsor-name">KOMUNITAS BERBAGI YOGYAKARTA</h4>
-                            </a>
-
-                            <!-- Placeholder cards for future community partners -->
-                            <div class="sponsor-card placeholder">
-                                <div class="sponsor-logo">
-                                    <span class="placeholder-icon">+</span>
-                                </div>
-                                <h4 class="sponsor-name muted">Coming Soon</h4>
-                            </div>
-
-                            <div class="sponsor-card placeholder">
-                                <div class="sponsor-logo">
-                                    <span class="placeholder-icon">+</span>
-                                </div>
-                                <h4 class="sponsor-name muted">Coming Soon</h4>
-                            </div>
-
-                            <div class="sponsor-card placeholder">
-                                <div class="sponsor-logo">
-                                    <span class="placeholder-icon">+</span>
-                                </div>
-                                <h4 class="sponsor-name muted">Coming Soon</h4>
-                            </div>
-
-                            <div class="sponsor-card placeholder">
-                                <div class="sponsor-logo">
-                                    <span class="placeholder-icon">+</span>
-                                </div>
-                                <h4 class="sponsor-name muted">Coming Soon</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="carousel-btn carousel-btn-right" id="communityRight">›</button>
-                </div>
-            </div>
+            <div class="dynamic-error" data-partners-error hidden></div>
         </div>
     </section>
 
