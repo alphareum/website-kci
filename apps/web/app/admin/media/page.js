@@ -1,9 +1,9 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import useSWR from 'swr';
 import MetadataEditor from '../../../components/MetadataEditor';
-import { apiGet, apiPost } from '../../../lib/api';
+import { apiGet, apiPost, apiUpload } from '../../../lib/api';
 
 const MEDIA_TYPES = [
   { type: 'gallery', label: 'Gallery' },
@@ -32,18 +32,31 @@ export default function MediaPage() {
   const [draft, setDraft] = useState(() => createEmptyMedia(activeType));
   const [formError, setFormError] = useState('');
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef(null);
+
+  function resetUploadState() {
+    setUploading(false);
+    setIsDragging(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  }
 
   function changeType(type) {
     setActiveType(type);
     setShowModal(false);
     setDraft(createEmptyMedia(type));
     setFormError('');
+    resetUploadState();
   }
 
   function openCreate() {
     setDraft(createEmptyMedia(activeType));
     setFormError('');
     setShowModal(true);
+    resetUploadState();
   }
 
   function openEdit(item) {
@@ -57,20 +70,142 @@ export default function MediaPage() {
     });
     setFormError('');
     setShowModal(true);
+    resetUploadState();
   }
 
   function closeModal() {
     setShowModal(false);
     setSaving(false);
     setFormError('');
+    resetUploadState();
   }
 
   function updateField(field, value) {
     setDraft((previous) => ({ ...previous, [field]: value }));
   }
 
+  const applyUploadResult = useCallback((url, metadata = {}) => {
+    setDraft((previous) => {
+      const nextMetadata = { ...(previous.metadata || {}) };
+      nextMetadata.uploaded_file_url = url;
+
+      if (metadata.originalName) {
+        nextMetadata.original_filename = metadata.originalName;
+      }
+      if (metadata.mimeType) {
+        nextMetadata.upload_mime_type = metadata.mimeType;
+      }
+      if (typeof metadata.size !== 'undefined') {
+        nextMetadata.upload_file_size = String(metadata.size);
+      }
+      if (metadata.storage) {
+        nextMetadata.upload_storage = metadata.storage;
+      }
+      if (metadata.storageKey) {
+        nextMetadata.upload_storage_key = metadata.storageKey;
+      }
+      if (metadata.folder) {
+        nextMetadata.upload_folder = metadata.folder;
+      }
+
+      return {
+        ...previous,
+        asset_url: url,
+        metadata: nextMetadata,
+      };
+    });
+  }, []);
+
+  const handleFileUpload = useCallback(
+    async (file) => {
+      if (!file || uploading) {
+        return;
+      }
+
+      setUploading(true);
+      setFormError('');
+
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('type', draft.type);
+
+        const response = await apiUpload('/media/upload', formData);
+        applyUploadResult(response.url, response.metadata || {});
+        setFormError('');
+      } catch (err) {
+        setFormError(err.message || 'Failed to upload file');
+      } finally {
+        setUploading(false);
+        setIsDragging(false);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
+      }
+    },
+    [applyUploadResult, draft.type, uploading]
+  );
+
+  const handleFileInputChange = useCallback(
+    (event) => {
+      const [file] = event.target.files || [];
+      if (!file) {
+        return;
+      }
+      if (uploading) {
+        return;
+      }
+      handleFileUpload(file);
+    },
+    [handleFileUpload, uploading]
+  );
+
+  const handleDrop = useCallback(
+    (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      setIsDragging(false);
+      if (uploading) {
+        return;
+      }
+      const file = event.dataTransfer?.files?.[0];
+      if (file) {
+        handleFileUpload(file);
+      }
+    },
+    [handleFileUpload, uploading]
+  );
+
+  const handleDragEnter = useCallback(
+    (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (!uploading) {
+        setIsDragging(true);
+      }
+    },
+    [uploading]
+  );
+
+  const handleDragLeave = useCallback((event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(false);
+  }, []);
+
+  const openFilePicker = useCallback(() => {
+    if (uploading) {
+      return;
+    }
+    fileInputRef.current?.click();
+  }, [uploading]);
+
   async function handleSubmit(event) {
     event.preventDefault();
+    if (uploading) {
+      setFormError('Please wait for the upload to finish before saving.');
+      return;
+    }
     setSaving(true);
     setFormError('');
 
@@ -210,6 +345,65 @@ export default function MediaPage() {
               </div>
 
               <div className="input-group">
+                <label>Upload asset</label>
+                <div
+                  role="button"
+                  tabIndex={0}
+                  onClick={openFilePicker}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      openFilePicker();
+                    }
+                  }}
+                  onDragEnter={handleDragEnter}
+                  onDragOver={handleDragEnter}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  style={{
+                    border: '2px dashed',
+                    borderColor: isDragging ? '#1f6feb' : '#d0d7de',
+                    borderRadius: '0.75rem',
+                    padding: '1.5rem',
+                    textAlign: 'center',
+                    background: isDragging ? '#f0f6ff' : '#f9fafb',
+                    cursor: uploading ? 'progress' : 'pointer',
+                    opacity: uploading ? 0.75 : 1,
+                    transition: 'all 0.2s ease-in-out',
+                    outline: 'none',
+                  }}
+                >
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={handleFileInputChange}
+                  />
+                  <div className="stack" style={{ gap: '0.35rem', alignItems: 'center' }}>
+                    <strong>{uploading ? 'Uploading…' : 'Drag and drop or click to select a file'}</strong>
+                    <span style={{ fontSize: '0.85rem', color: '#555' }}>
+                      We'll host this asset and provide a reusable public link.
+                    </span>
+                    {draft.asset_url ? (
+                      <span
+                        style={{
+                          fontSize: '0.85rem',
+                          color: '#1f6feb',
+                          wordBreak: 'break-word',
+                        }}
+                      >
+                        Current URL: {draft.asset_url}
+                      </span>
+                    ) : null}
+                  </div>
+                </div>
+                <span style={{ fontSize: '0.8rem', color: '#555' }}>
+                  Prefer an external resource? Paste its link below.
+                </span>
+              </div>
+
+              <div className="input-group">
                 <label htmlFor="media-url">Asset URL</label>
                 <input
                   id="media-url"
@@ -223,10 +417,15 @@ export default function MediaPage() {
               <MetadataEditor value={draft.metadata} onChange={(metadata) => updateField('metadata', metadata)} />
 
               <div className="actions">
-                <button type="button" className="button secondary" onClick={closeModal} disabled={saving}>
+                <button
+                  type="button"
+                  className="button secondary"
+                  onClick={closeModal}
+                  disabled={saving || uploading}
+                >
                   Cancel
                 </button>
-                <button type="submit" className="button" disabled={saving}>
+                <button type="submit" className="button" disabled={saving || uploading}>
                   {saving ? 'Saving…' : 'Save asset'}
                 </button>
               </div>
