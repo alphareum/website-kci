@@ -14,6 +14,7 @@ const DEFAULT_PRIMARY_LINKS = [
   { href: '/tentang_kci', label: 'Tentang' },
   { href: '#acara', label: 'Acara' },
   { href: '/galeri', label: 'Galeri' },
+  { href: '/blog', label: 'Blog' },
   { href: '#testimoni', label: 'Testimoni' },
   { href: '#kontak', label: 'Kontak' },
   { href: '#sponsor', label: 'Partner' },
@@ -23,6 +24,7 @@ const DEFAULT_SECONDARY_LINKS = [
   { href: '#visi-misi', label: 'Visi & Misi' },
   { href: '#acara', label: 'Acara' },
   { href: '/galeri', label: 'Galeri' },
+  { href: '/blog', label: 'Blog' },
   { href: '#kontak', label: 'Kontak' },
 ];
 
