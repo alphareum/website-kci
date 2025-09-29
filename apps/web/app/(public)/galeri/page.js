@@ -1,4 +1,5 @@
 import { LegacyShell } from '../../../components/legacy/LegacyShell';
+import { GalleryGrid } from '../../../components/legacy/GalleryGrid';
 
 export const metadata = {
   title: 'Galeri — Komunitas Chinese Indonesia',
@@ -56,52 +57,7 @@ export default function GaleriPage() {
             <p className="section-subtitle">Kumpulan momen kegiatan Komunitas Chinese Indonesia</p>
           </div>
 
-          <div className="gallery-grid">
-            <figure className="gallery-card">
-              <img
-                className="gallery-image"
-                src="/assets/events/basketbersamakci.jpg"
-                alt="Basket bersama KCI"
-                width={1600}
-                height={1200}
-                loading="lazy"
-              />
-              <figcaption className="gallery-caption">
-                <h3>Basket Bersama KCI</h3>
-                <p>Kebersamaan melalui olahraga bareng.</p>
-              </figcaption>
-            </figure>
-
-            <figure className="gallery-card">
-              <img
-                className="gallery-image"
-                src="/assets/events/nontonbersamakci.jpg"
-                alt="Nonton bersama KCI"
-                width={1600}
-                height={1200}
-                loading="lazy"
-              />
-              <figcaption className="gallery-caption">
-                <h3>Nonton Bersama</h3>
-                <p>Menikmati film bareng komunitas.</p>
-              </figcaption>
-            </figure>
-
-            <figure className="gallery-card">
-              <img
-                className="gallery-image"
-                src="/assets/events/zoombersamakci.jpg"
-                alt="Zoom bersama KCI"
-                width={1600}
-                height={1200}
-                loading="lazy"
-              />
-              <figcaption className="gallery-caption">
-                <h3>Zoom Bersama</h3>
-                <p>Diskusi daring &amp; koordinasi acara.</p>
-              </figcaption>
-            </figure>
-          </div>
+          <GalleryGrid />
         </div>
       </section>
 
