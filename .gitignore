@@ -1,0 +1,8 @@
+node_modules/
+.env
+apps/api/.env
+apps/api/dist/
+apps/api/coverage/
+scripts/migrations/dist/
+.DS_Store
+apps/api/_runtime_data/

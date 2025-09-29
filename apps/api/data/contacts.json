@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "name": "Founder KCI",
+    "role": "Pendiri Komunitas",
+    "phone": "+62 878-8492-4385",
+    "whatsapp_url": "https://wa.me/6287884924385",
+    "photo_url": "/assets/profile/founder-profile.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Admin KCI",
+    "role": "Administrasi & Informasi Kegiatan",
+    "phone": "+62 856-4187-7775",
+    "whatsapp_url": "https://wa.me/6285641877775",
+    "photo_url": "/assets/profile/admin-kci-profile.jpg"
+  }
+]
