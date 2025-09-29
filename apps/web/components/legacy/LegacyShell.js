@@ -2,10 +2,76 @@
 
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import useSWR from 'swr';
+import { apiGet } from '../../lib/api';
 
 const SCROLL_TOP_THRESHOLD = 500;
 const HEADER_HIDE_THRESHOLD = 100;
 const LOADER_DELAY_MS = 500;
+
+const EMPTY_GROUPS = Object.freeze({
+  primary: [],
+  secondary: [],
+  social: [],
+});
+
+function normalizeLink(link) {
+  const href = link?.url ?? link?.href ?? '';
+  const label = link?.label ?? link?.title ?? link?.name ?? href;
+
+  return {
+    id: link?.id,
+    label,
+    href,
+    url: href,
+    original: link,
+  };
+}
+
+function groupLinks(links) {
+  if (!Array.isArray(links)) {
+    return EMPTY_GROUPS;
+  }
+
+  const grouped = {
+    primary: [],
+    secondary: [],
+    social: [],
+  };
+
+  links.forEach((link) => {
+    if (!link?.is_active) return;
+
+    const category = link?.category;
+
+    if (!category || !(category in grouped)) return;
+
+    const normalized = normalizeLink(link);
+
+    if (!normalized.href || !normalized.label) return;
+
+    grouped[category].push(normalized);
+  });
+
+  return grouped;
+}
+
+export function useLegacyLinkGroups() {
+  const { data, error, isLoading } = useSWR('/links', () => apiGet('/links'));
+
+  const groups = useMemo(() => {
+    if (!data?.links) {
+      return EMPTY_GROUPS;
+    }
+    return groupLinks(data.links);
+  }, [data]);
+
+  return {
+    groups,
+    error,
+    isLoading,
+  };
+}
 
 function isExternalHref(href) {
   return /^https?:/i.test(href);
@@ -41,7 +107,7 @@ function LegacyNavLink({ href, children, onClick }) {
   );
 }
 
-export function LegacyShell({ children, navLinks, variant = 'home' }) {
+export function LegacyShell({ children, navLinks = [], variant = 'home' }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [theme, setTheme] = useState('light');
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -125,6 +191,11 @@ export function LegacyShell({ children, navLinks, variant = 'home' }) {
 
   const shellClassName = `legacy-shell${menuOpen ? ' legacy-shell--menu-open' : ''}`;
 
+  const resolvedNavLinks = useMemo(
+    () => (Array.isArray(navLinks) ? navLinks.filter((link) => link?.href && link?.label) : []),
+    [navLinks],
+  );
+
   return (
     <div className={shellClassName} data-theme={theme}>
       <div className="pattern-overlay" aria-hidden="true" />
@@ -141,7 +212,7 @@ export function LegacyShell({ children, navLinks, variant = 'home' }) {
             </div>
           </div>
           <ul className={`nav-menu${menuOpen ? ' active' : ''}`} id="navMenu">
-            {navLinks.map((link) => (
+            {resolvedNavLinks.map((link) => (
               <li key={link.href}>
                 <LegacyNavLink href={link.href} onClick={handleNavClick(link.href)}>
                   {link.label}

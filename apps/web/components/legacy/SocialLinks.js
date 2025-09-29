@@ -1,7 +1,7 @@
 'use client';
 
-import useSWR from 'swr';
-import { apiGet } from '../../lib/api';
+import { useMemo } from 'react';
+import { useLegacyLinkGroups } from './LegacyShell';
 
 const DEFAULT_LINKS = [
   {
@@ -74,17 +74,21 @@ function renderIcon(name) {
 }
 
 export function SocialLinks() {
-  const { data, error } = useSWR('/links', () => apiGet('/links'));
-  const apiLinks = data?.links
-    ?.filter((link) => link.category === 'social' && link.is_active)
-    .map((link) => ({
-      label: link.label,
-      url: link.url,
-      icon: getIconName(link.url),
-      id: link.id,
-    }));
+  const { groups, error } = useLegacyLinkGroups();
+  const socialGroup = groups?.social ?? [];
 
-  const links = apiLinks && apiLinks.length > 0 ? apiLinks : DEFAULT_LINKS;
+  const cmsLinks = useMemo(
+    () =>
+      socialGroup.map((link) => ({
+        label: link.label,
+        url: link.url ?? link.href,
+        icon: getIconName(link.url ?? link.href ?? ''),
+        id: link.id,
+      })),
+    [socialGroup],
+  );
+
+  const links = cmsLinks.length > 0 ? cmsLinks : DEFAULT_LINKS;
 
   return (
     <>
