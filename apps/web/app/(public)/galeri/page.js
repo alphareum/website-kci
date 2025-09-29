@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { href: '/tentang_kci', label: 'Tentang' },
   { href: '/#acara', label: 'Acara' },
   { href: '/galeri', label: 'Galeri' },
+  { href: '/blog', label: 'Blog' },
   { href: '/#testimoni', label: 'Testimoni' },
   { href: '/#kontak', label: 'Kontak' },
   { href: '/#sponsor', label: 'Partner' },
@@ -104,6 +105,9 @@ export default function GaleriPage() {
               </p>
               <p>
                 <a href="/galeri">Galeri</a>
+              </p>
+              <p>
+                <a href="/blog">Blog</a>
               </p>
               <p>
                 <a href="/#kontak">Kontak</a>

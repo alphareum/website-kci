@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { clearSession, getSession } from '../../lib/session';
 
 const NAV_ITEMS = [
+  { href: '/admin/posts', label: 'Posts' },
   { href: '/admin/events', label: 'Events' },
   { href: '/admin/media', label: 'Media' },
   { href: '/admin/contacts', label: 'Contacts' },
