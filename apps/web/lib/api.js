@@ -1,11 +1,17 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE || '/api';
+export const API_BASE = process.env.NEXT_PUBLIC_API_BASE || '/api';
 
 async function request(path, options = {}) {
   const url = `${API_BASE}${path}`;
-  const headers = {
-    'Content-Type': 'application/json',
-    ...(options.headers || {}),
-  };
+  const isFormData =
+    typeof FormData !== 'undefined' && options.body instanceof FormData;
+  const headers = isFormData
+    ? {
+        ...(options.headers || {}),
+      }
+    : {
+        'Content-Type': 'application/json',
+        ...(options.headers || {}),
+      };
 
   const response = await fetch(url, {
     ...options,
@@ -39,6 +45,13 @@ export function apiPost(path, body) {
   return request(path, {
     method: 'POST',
     body: JSON.stringify(body),
+  });
+}
+
+export function apiUpload(path, formData) {
+  return request(path, {
+    method: 'POST',
+    body: formData,
   });
 }
 

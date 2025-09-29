@@ -5,12 +5,29 @@ const TABLE = 'media_library';
 
 const MediaTypeEnum = z.enum(['gallery', 'testimonial', 'partner']);
 
+const AssetUrlSchema = z
+  .string()
+  .min(1)
+  .refine(
+    (value) => {
+      try {
+        const parsed = new URL(value);
+        return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+      } catch (err) {
+        return value.startsWith('/');
+      }
+    },
+    {
+      message: 'Asset URL must be an absolute URL or start with /',
+    }
+  );
+
 export const MediaItemSchema = z.object({
   id: z.number().int().positive(),
   type: MediaTypeEnum,
   title: z.string().nullable(),
   description: z.string().nullable(),
-  asset_url: z.string().url(),
+  asset_url: AssetUrlSchema,
   metadata: z.record(z.any()).nullable(),
   created_at: z.string(),
 });
@@ -20,11 +37,32 @@ export const UpsertMediaSchema = MediaItemSchema.partial({
   created_at: true,
 }).extend({
   type: MediaTypeEnum,
-  asset_url: z.string().url(),
+  asset_url: AssetUrlSchema,
 });
 
 export type MediaItem = z.infer<typeof MediaItemSchema>;
 export type UpsertMediaInput = z.infer<typeof UpsertMediaSchema>;
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
+function mergeMetadata(
+  incoming: Record<string, unknown> | null | undefined,
+  existing: Record<string, unknown> | null | undefined
+): Record<string, unknown> | null {
+  if (incoming === null) {
+    return null;
+  }
+
+  if (typeof incoming === 'undefined') {
+    return isRecord(existing) ? existing : null;
+  }
+
+  const base = isRecord(existing) ? existing : {};
+  const merged = { ...base, ...incoming } as Record<string, unknown>;
+  return Object.keys(merged).length > 0 ? merged : null;
+}
 
 function buildMediaRecord(id: number, input: UpsertMediaInput, existing?: MediaItem): MediaItem {
   return {
@@ -33,7 +71,7 @@ function buildMediaRecord(id: number, input: UpsertMediaInput, existing?: MediaI
     title: input.title ?? existing?.title ?? null,
     description: input.description ?? existing?.description ?? null,
     asset_url: input.asset_url ?? existing?.asset_url ?? '',
-    metadata: input.metadata ?? existing?.metadata ?? null,
+    metadata: mergeMetadata(input.metadata, existing?.metadata),
     created_at: existing?.created_at ?? new Date().toISOString(),
   };
 }

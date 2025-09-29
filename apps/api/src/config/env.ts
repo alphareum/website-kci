@@ -14,6 +14,7 @@ const EnvSchema = z.object({
   API_PORT: z.coerce.number().default(3000),
   SUPABASE_URL: z.string().url().optional(),
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional(),
+  SUPABASE_STORAGE_BUCKET: z.string().min(1).default('media-library'),
   LEGACY_MYSQL_DSN: z.string().optional(),
   DATA_DIR: z.string().default(defaultDataDir),
 });
@@ -39,6 +40,7 @@ export const env = {
     ? {
         url: envVars.SUPABASE_URL,
         serviceRoleKey: envVars.SUPABASE_SERVICE_ROLE_KEY,
+        storageBucket: envVars.SUPABASE_STORAGE_BUCKET,
       }
     : null,
   legacy: {
