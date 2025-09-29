@@ -11,6 +11,29 @@ const MEDIA_TYPES = [
   { type: 'partner', label: 'Partners' },
 ];
 
+function isValidAssetUrl(value) {
+  if (!value) {
+    return false;
+  }
+
+  const trimmedValue = value.trim();
+
+  if (!trimmedValue) {
+    return false;
+  }
+
+  if (trimmedValue.startsWith('/')) {
+    return true;
+  }
+
+  try {
+    const parsed = new URL(trimmedValue);
+    return Boolean(parsed.protocol) && Boolean(parsed.hostname);
+  } catch (error) {
+    return false;
+  }
+}
+
 function createEmptyMedia(activeType) {
   return {
     id: null,
@@ -206,6 +229,18 @@ export default function MediaPage() {
       setFormError('Please wait for the upload to finish before saving.');
       return;
     }
+
+    const trimmedAssetUrl = draft.asset_url?.trim() ?? '';
+    if (!trimmedAssetUrl) {
+      setFormError('Please provide an asset URL or upload a file before saving.');
+      return;
+    }
+
+    if (!isValidAssetUrl(trimmedAssetUrl)) {
+      setFormError('Please provide a valid URL or uploaded file path (starting with /).');
+      return;
+    }
+
     setSaving(true);
     setFormError('');
 
@@ -214,7 +249,7 @@ export default function MediaPage() {
       type: draft.type,
       title: draft.title || null,
       description: draft.description || null,
-      asset_url: draft.asset_url,
+      asset_url: trimmedAssetUrl,
       metadata: Object.keys(draft.metadata || {}).length ? draft.metadata : null,
     };
 
@@ -407,8 +442,7 @@ export default function MediaPage() {
                 <label htmlFor="media-url">Asset URL</label>
                 <input
                   id="media-url"
-                  type="url"
-                  required
+                  type="text"
                   value={draft.asset_url}
                   onChange={(event) => updateField('asset_url', event.target.value)}
                 />
