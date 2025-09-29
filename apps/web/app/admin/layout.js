@@ -8,6 +8,7 @@ import { clearSession, getSession } from '../../lib/session';
 const NAV_ITEMS = [
   { href: '/admin/events', label: 'Events' },
   { href: '/admin/media', label: 'Media' },
+  { href: '/admin/contacts', label: 'Contacts' },
   { href: '/admin/links', label: 'Links' },
   { href: '/admin/messages', label: 'Messages' },
 ];

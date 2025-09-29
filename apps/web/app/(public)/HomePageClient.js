@@ -1,10 +1,12 @@
 'use client';
 
+import useSWR from 'swr';
 import { EventsGrid } from '../../components/legacy/EventsGrid';
 import { LegacyShell, useLegacyLinkGroups } from '../../components/legacy/LegacyShell';
 import { PartnersGrid } from '../../components/legacy/PartnersGrid';
 import { SocialLinks } from '../../components/legacy/SocialLinks';
 import { TestimonialsGrid } from '../../components/legacy/TestimonialsGrid';
+import { apiGet } from '../../lib/api';
 
 const DEFAULT_PRIMARY_LINKS = [
   { href: '#beranda', label: 'Beranda' },
@@ -23,6 +25,29 @@ const DEFAULT_SECONDARY_LINKS = [
   { href: '/galeri', label: 'Galeri' },
   { href: '#kontak', label: 'Kontak' },
 ];
+
+const DEFAULT_CONTACTS = [
+  {
+    id: 'founder',
+    name: 'Founder KCI',
+    role: 'Pendiri Komunitas',
+    phone: '+62 878-8492-4385',
+    whatsapp_url: 'https://wa.me/6287884924385',
+    photo_url: '/assets/profile/founder-profile.jpg',
+  },
+  {
+    id: 'admin',
+    name: 'Admin KCI',
+    role: 'Administrasi & Informasi Kegiatan',
+    phone: '+62 856-4187-7775',
+    whatsapp_url: 'https://wa.me/6285641877775',
+    photo_url: '/assets/profile/admin-kci-profile.jpg',
+  },
+];
+
+function toTelHref(phone = '') {
+  return phone.replace(/[^0-9+]/g, '');
+}
 
 function isExternalHref(href = '') {
   return /^https?:/i.test(href);
@@ -48,6 +73,9 @@ export function HomePageClient() {
   const { groups } = useLegacyLinkGroups();
   const primaryGroup = groups?.primary ?? [];
   const secondaryGroup = groups?.secondary ?? [];
+  const { data: contactsData } = useSWR('/contacts', () => apiGet('/contacts'));
+  const contacts = contactsData?.contacts ?? [];
+  const contactCards = contacts.length > 0 ? contacts : DEFAULT_CONTACTS;
 
   const navLinks = primaryGroup.length > 0 ? primaryGroup : DEFAULT_PRIMARY_LINKS;
   const footerLinks = secondaryGroup.length > 0 ? secondaryGroup : DEFAULT_SECONDARY_LINKS;
@@ -156,39 +184,36 @@ export function HomePageClient() {
           </div>
 
           <div className="contact-grid">
-            <div className="contact-card">
-              <div className="contact-avatar">
-                <img
-                  src="/assets/profile/founder-profile.jpg"
-                  alt="Founder KCI"
-                  width={600}
-                  height={600}
-                  loading="lazy"
-                />
+            {contactCards.map((contact) => (
+              <div key={contact.id} className="contact-card">
+                <div className="contact-avatar">
+                  {contact.photo_url ? (
+                    <img src={contact.photo_url} alt={contact.name} width={600} height={600} loading="lazy" />
+                  ) : (
+                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--gray)' }}>
+                      {contact.name?.[0] ?? '?'}
+                    </span>
+                  )}
+                </div>
+                <h3>{contact.name}</h3>
+                {contact.role ? <p>{contact.role}</p> : null}
+                {contact.phone ? (
+                  <p>
+                    <a href={`tel:${toTelHref(contact.phone)}`}>{contact.phone}</a>
+                  </p>
+                ) : null}
+                {contact.whatsapp_url ? (
+                  <a
+                    href={contact.whatsapp_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-whatsapp"
+                  >
+                    Hubungi via WhatsApp
+                  </a>
+                ) : null}
               </div>
-              <h3>Founder KCI</h3>
-              <p>Hubungi pendiri komunitas untuk informasi lebih lanjut tentang visi dan misi KCI</p>
-              <a href="https://wa.me/6287884924385" target="_blank" rel="noopener noreferrer" className="btn-whatsapp">
-                Hubungi via WhatsApp
-              </a>
-            </div>
-
-            <div className="contact-card">
-              <div className="contact-avatar">
-                <img
-                  src="/assets/profile/admin-kci-profile.jpg"
-                  alt="Admin KCI"
-                  width={600}
-                  height={600}
-                  loading="lazy"
-                />
-              </div>
-              <h3>Admin KCI</h3>
-              <p>Kontak admin untuk keperluan administrasi, pendaftaran, dan informasi kegiatan</p>
-              <a href="https://wa.me/6285641877775" target="_blank" rel="noopener noreferrer" className="btn-whatsapp">
-                Hubungi via WhatsApp
-              </a>
-            </div>
+            ))}
           </div>
 
           <div className="social-container" style={{ textAlign: 'center', marginTop: '24px' }}>
