@@ -1,5 +1,5 @@
 import multipart from '@fastify/multipart';
-import type { MultipartValue } from '@fastify/multipart';
+import type { Multipart, MultipartValue } from '@fastify/multipart';
 import { randomUUID } from 'node:crypto';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -12,6 +12,10 @@ import { MediaService, UpsertMediaSchema } from './service.js';
 const moduleDir = path.dirname(fileURLToPath(import.meta.url));
 const appsDir = path.resolve(moduleDir, '../../../..');
 const LOCAL_UPLOAD_ROOT = path.resolve(appsDir, 'web/public/uploads');
+
+function isMultipartFieldWithStringValue(entry: Multipart): entry is MultipartValue<string> {
+  return entry.type === 'field' && typeof entry.value === 'string';
+}
 
 function sanitizeSegment(value?: string | null) {
   if (!value) {
@@ -94,12 +98,13 @@ export async function mediaRoutes(server: FastifyInstance) {
     }
 
     const typeField = file.fields?.type;
-    const resolvedTypeField = Array.isArray(typeField) ? typeField[0] : typeField;
-    const typeFieldValue =
-      resolvedTypeField && resolvedTypeField.type === 'field'
-        ? (resolvedTypeField as MultipartValue<string | null | undefined>).value
-        : null;
-    const fieldType = typeof typeFieldValue === 'string' ? typeFieldValue : null;
+    const entries: Multipart[] = Array.isArray(typeField)
+      ? typeField
+      : typeField
+        ? [typeField]
+        : [];
+    const typeFieldEntry = entries.find(isMultipartFieldWithStringValue);
+    const fieldType = typeFieldEntry?.value ?? null;
     const folder = sanitizeSegment(fieldType);
     const fileName = buildFileName(file.filename);
     const baseMetadata = {
