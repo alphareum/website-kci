@@ -1,4 +1,5 @@
 import multipart from '@fastify/multipart';
+import type { MultipartValue } from '@fastify/multipart';
 import { randomUUID } from 'node:crypto';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -52,12 +53,9 @@ async function storeFileInSupabase(folder: string, fileName: string, buffer: Buf
     throw uploadResult.error;
   }
 
-  const publicUrlResult = supabase.storage.from(bucket).getPublicUrl(objectKey);
-  if (publicUrlResult.error) {
-    throw publicUrlResult.error;
-  }
+  const { data: publicUrlData } = supabase.storage.from(bucket).getPublicUrl(objectKey);
 
-  const publicUrl = publicUrlResult.data.publicUrl;
+  const publicUrl = publicUrlData?.publicUrl;
   if (!publicUrl) {
     throw new Error('Failed to resolve public URL for uploaded file.');
   }
@@ -95,7 +93,13 @@ export async function mediaRoutes(server: FastifyInstance) {
       throw server.httpErrors.badRequest('Uploaded file is empty');
     }
 
-    const fieldType = typeof file.fields?.type?.value === 'string' ? file.fields?.type?.value : null;
+    const typeField = file.fields?.type;
+    const resolvedTypeField = Array.isArray(typeField) ? typeField[0] : typeField;
+    const typeFieldValue =
+      resolvedTypeField && resolvedTypeField.type === 'field'
+        ? (resolvedTypeField as MultipartValue<string | null | undefined>).value
+        : null;
+    const fieldType = typeof typeFieldValue === 'string' ? typeFieldValue : null;
     const folder = sanitizeSegment(fieldType);
     const fileName = buildFileName(file.filename);
     const baseMetadata = {
