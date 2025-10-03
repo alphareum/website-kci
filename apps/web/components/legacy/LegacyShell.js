@@ -24,6 +24,7 @@ function normalizeLink(link) {
     label,
     href,
     url: href,
+    icon: typeof link?.icon === 'string' && link.icon ? link.icon : undefined,
     original: link,
   };
 }

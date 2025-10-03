@@ -11,6 +11,15 @@ const CATEGORIES = [
   { value: 'social', label: 'Social links' },
 ];
 
+const SOCIAL_ICON_OPTIONS = [
+  { value: '', label: 'Auto-detect from URL' },
+  { value: 'instagram', label: 'Instagram' },
+  { value: 'facebook', label: 'Facebook' },
+  { value: 'tiktok', label: 'TikTok' },
+  { value: 'youtube', label: 'YouTube' },
+  { value: 'whatsapp', label: 'WhatsApp' },
+];
+
 function createEmptyLink() {
   return {
     id: null,
@@ -19,6 +28,7 @@ function createEmptyLink() {
     category: 'primary',
     order: 0,
     is_active: true,
+    icon: '',
   };
 }
 
@@ -39,7 +49,7 @@ export default function LinksPage() {
   }
 
   function openEdit(link) {
-    setDraft({ ...link });
+    setDraft({ ...link, icon: link.icon ?? '' });
     setFormError('');
     setShowModal(true);
   }
@@ -51,7 +61,13 @@ export default function LinksPage() {
   }
 
   function updateField(field, value) {
-    setDraft((previous) => ({ ...previous, [field]: value }));
+    setDraft((previous) => {
+      const next = { ...previous, [field]: value };
+      if (field === 'category' && value !== 'social') {
+        next.icon = '';
+      }
+      return next;
+    });
   }
 
   async function handleSubmit(event) {
@@ -66,6 +82,7 @@ export default function LinksPage() {
       category: draft.category,
       order: Number(draft.order) || 0,
       is_active: Boolean(draft.is_active),
+      icon: draft.category === 'social' ? draft.icon || null : null,
     };
 
     try {
@@ -177,6 +194,11 @@ export default function LinksPage() {
                           <a href={link.url} target="_blank" rel="noreferrer">
                             {link.url}
                           </a>
+                          {link.category === 'social' ? (
+                            <span style={{ fontSize: '0.8rem', color: '#555' }}>
+                              Icon: {link.icon ? link.icon : 'Auto'}
+                            </span>
+                          ) : null}
                         </div>
                         <div style={{ display: 'flex', gap: '0.5rem' }}>
                           <button
@@ -270,6 +292,26 @@ export default function LinksPage() {
                   />
                 </div>
               </div>
+
+              {draft.category === 'social' ? (
+                <div className="input-group">
+                  <label htmlFor="link-icon">Icon</label>
+                  <select
+                    id="link-icon"
+                    value={draft.icon || ''}
+                    onChange={(event) => updateField('icon', event.target.value)}
+                  >
+                    {SOCIAL_ICON_OPTIONS.map((option) => (
+                      <option key={option.value || 'auto'} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                  <span style={{ fontSize: '0.8rem', color: '#555' }}>
+                    This icon is shown for the link on the public site.
+                  </span>
+                </div>
+              ) : null}
 
               <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <input

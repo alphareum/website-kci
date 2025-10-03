@@ -1,7 +1,9 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useId, useMemo, useState } from 'react';
 import useSWR from 'swr';
+import { MediaLibraryPicker } from '../../../components/admin/MediaLibraryPicker';
+import { ImageUploadField } from '../../../components/admin/ImageUploadField';
 import { apiGet, apiPost } from '../../../lib/api';
 import { fromJakartaInputValue, toJakartaInputValue } from '../../../lib/utils';
 
@@ -28,6 +30,9 @@ export default function EventsPage() {
   const [saving, setSaving] = useState(false);
   const [draft, setDraft] = useState(() => createEmptyEvent());
   const [editingId, setEditingId] = useState(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const heroImageLabelId = useId();
+  const heroImageHelpId = `${heroImageLabelId}-help`;
 
   function openCreate() {
     setDraft(createEmptyEvent());
@@ -59,6 +64,14 @@ export default function EventsPage() {
 
   function updateField(field, value) {
     setDraft((previous) => ({ ...previous, [field]: value }));
+  }
+
+  function handleMediaSelect(item) {
+    if (!item) {
+      return;
+    }
+    updateField('hero_image_url', item.asset_url || '');
+    setPickerOpen(false);
   }
 
   async function handleSubmit(event) {
@@ -240,13 +253,61 @@ export default function EventsPage() {
                   />
                 </div>
                 <div className="input-group">
-                  <label htmlFor="hero">Hero image URL</label>
-                  <input
-                    id="hero"
-                    type="url"
+                  <label id={heroImageLabelId} htmlFor="hero">
+                    Hero image
+                  </label>
+                  <ImageUploadField
                     value={draft.hero_image_url}
-                    onChange={(event) => updateField('hero_image_url', event.target.value)}
+                    onChange={(url) => updateField('hero_image_url', url)}
+                    uploadType="events"
+                    ariaLabelledBy={heroImageLabelId}
+                    ariaDescribedBy={heroImageHelpId}
+                    disabled={saving}
+                    helperText="Upload the featured image for this event."
                   />
+                  <span id={heroImageHelpId} style={{ fontSize: '0.8rem', color: '#555' }}>
+                    Prefer an external resource? Paste its link below or reuse an item from the media library.
+                  </span>
+                  <div className="stack" style={{ gap: '0.5rem' }}>
+                    <input
+                      id="hero"
+                      type="text"
+                      placeholder="https://example.com/image.jpg or /uploads/example.jpg"
+                      value={draft.hero_image_url}
+                      onChange={(event) => updateField('hero_image_url', event.target.value)}
+                    />
+                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                      <button type="button" className="button secondary" onClick={() => setPickerOpen(true)}>
+                        Choose from media library
+                      </button>
+                      {draft.hero_image_url ? (
+                        <button
+                          type="button"
+                          className="button secondary"
+                          onClick={() => updateField('hero_image_url', '')}
+                        >
+                          Remove image
+                        </button>
+                      ) : null}
+                    </div>
+                    {draft.hero_image_url ? (
+                      <div
+                        style={{
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '0.75rem',
+                          overflow: 'hidden',
+                          width: '100%',
+                          maxWidth: '320px',
+                        }}
+                      >
+                        <img
+                          src={draft.hero_image_url}
+                          alt="Selected hero"
+                          style={{ width: '100%', display: 'block', objectFit: 'cover' }}
+                        />
+                      </div>
+                    ) : null}
+                  </div>
                 </div>
               </div>
 
@@ -293,6 +354,7 @@ export default function EventsPage() {
           </div>
         </div>
       ) : null}
+      <MediaLibraryPicker open={pickerOpen} onClose={() => setPickerOpen(false)} onSelect={handleMediaSelect} />
     </section>
   );
 }

@@ -1,17 +1,22 @@
 import multipart from '@fastify/multipart';
 import type { Multipart, MultipartValue } from '@fastify/multipart';
 import { randomUUID } from 'node:crypto';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { FastifyInstance } from 'fastify';
 import { env } from '../../config/env.js';
 import { getSupabaseClient } from '../../lib/supabase.js';
+import type { MediaItem } from './service.js';
 import { MediaService, UpsertMediaSchema } from './service.js';
 
 const moduleDir = path.dirname(fileURLToPath(import.meta.url));
 const appsDir = path.resolve(moduleDir, '../../../..');
 const LOCAL_UPLOAD_ROOT = path.resolve(appsDir, 'web/public/uploads');
+
+function isMetadataRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
 
 function isMultipartFieldWithStringValue(entry: Multipart): entry is MultipartValue<string> {
   return entry.type === 'field' && typeof entry.value === 'string';
@@ -147,4 +152,55 @@ export async function mediaRoutes(server: FastifyInstance) {
     const item = await service.upsertMedia(payload);
     return { item };
   });
+
+  server.delete('/:id', async (request) => {
+    const { id } = request.params as { id: string };
+    const numericId = Number(id);
+    if (!Number.isFinite(numericId) || numericId <= 0) {
+      throw server.httpErrors.badRequest('Invalid media id');
+    }
+
+    const removed = await service.deleteMedia(numericId);
+    await removeStoredFile(server, removed);
+    return { success: true };
+  });
+}
+
+async function removeStoredFile(server: FastifyInstance, item: MediaItem) {
+  const metadata = item.metadata;
+  if (!isMetadataRecord(metadata)) {
+    return;
+  }
+
+  const storage = metadata.upload_storage;
+  const storageKey = typeof metadata.upload_storage_key === 'string' ? metadata.upload_storage_key : null;
+
+  if (!storageKey) {
+    return;
+  }
+
+  if (storage === 'local') {
+    const targetPath = path.join(LOCAL_UPLOAD_ROOT, storageKey);
+    try {
+      await unlink(targetPath);
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
+        server.log.error({ err: error, storageKey }, 'Failed to remove local media file');
+      }
+    }
+    return;
+  }
+
+  if (storage === 'supabase' && env.supabase) {
+    try {
+      const supabase = getSupabaseClient();
+      const bucket = env.supabase.storageBucket ?? 'media-library';
+      const { error } = await supabase.storage.from(bucket).remove([storageKey]);
+      if (error) {
+        server.log.error({ err: error, storageKey }, 'Failed to remove Supabase media file');
+      }
+    } catch (error) {
+      server.log.error({ err: error, storageKey }, 'Failed to remove Supabase media file');
+    }
+  }
 }

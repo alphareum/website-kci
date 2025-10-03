@@ -3,13 +3,30 @@ import { nextId, readTable, writeTable } from '../../lib/json-store.js';
 
 const TABLE = 'posts';
 
+const AssetUrlSchema = z
+  .string()
+  .min(1)
+  .refine(
+    (value) => {
+      try {
+        const parsed = new URL(value);
+        return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+      } catch (err) {
+        return value.startsWith('/');
+      }
+    },
+    {
+      message: 'Cover image must be an absolute URL or start with /',
+    },
+  );
+
 export const PostSchema = z.object({
   id: z.number().int().positive(),
   title: z.string(),
   slug: z.string(),
   summary: z.string().nullable(),
   body: z.string(),
-  cover_image_url: z.string().url().nullable(),
+  cover_image_url: AssetUrlSchema.nullable(),
   published_at: z.string().datetime().nullable(),
   is_published: z.boolean(),
 });

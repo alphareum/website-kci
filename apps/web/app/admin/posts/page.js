@@ -1,8 +1,9 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useId, useMemo, useState } from 'react';
 import useSWR from 'swr';
 import { MediaLibraryPicker } from '../../../components/admin/MediaLibraryPicker';
+import { ImageUploadField } from '../../../components/admin/ImageUploadField';
 import { apiDelete, apiGet, apiPost } from '../../../lib/api';
 
 function createEmptyPost() {
@@ -54,6 +55,8 @@ export default function PostsAdminPage() {
   const [editingId, setEditingId] = useState(null);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
+  const coverImageLabelId = useId();
+  const coverImageHelpId = `${coverImageLabelId}-help`;
 
   function openCreate() {
     setDraft(createEmptyPost());
@@ -303,11 +306,26 @@ export default function PostsAdminPage() {
                   />
                 </div>
                 <div className="input-group">
-                  <label htmlFor="cover_image">Cover image URL</label>
+                  <label id={coverImageLabelId} htmlFor="cover_image">
+                    Cover image
+                  </label>
+                  <ImageUploadField
+                    value={draft.cover_image_url}
+                    onChange={(url) => updateField('cover_image_url', url)}
+                    uploadType="posts"
+                    ariaLabelledBy={coverImageLabelId}
+                    ariaDescribedBy={coverImageHelpId}
+                    disabled={saving}
+                    helperText="Upload a new cover image for this post."
+                  />
+                  <span id={coverImageHelpId} style={{ fontSize: '0.8rem', color: '#555' }}>
+                    Prefer an external resource? Paste its link below or pick an existing asset.
+                  </span>
                   <div className="stack" style={{ gap: '0.5rem' }}>
                     <input
                       id="cover_image"
-                      type="url"
+                      type="text"
+                      placeholder="https://example.com/image.jpg or /uploads/example.jpg"
                       value={draft.cover_image_url}
                       onChange={(event) => updateField('cover_image_url', event.target.value)}
                     />
