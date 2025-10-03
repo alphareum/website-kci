@@ -3,6 +3,23 @@ import { nextId, readTable, writeTable } from '../../lib/json-store.js';
 
 const TABLE = 'events';
 
+const AssetUrlSchema = z
+  .string()
+  .min(1)
+  .refine(
+    (value) => {
+      try {
+        const parsed = new URL(value);
+        return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+      } catch (err) {
+        return value.startsWith('/');
+      }
+    },
+    {
+      message: 'Hero image must be an absolute URL or start with /',
+    },
+  );
+
 export const EventSchema = z.object({
   id: z.number().int().positive(),
   title: z.string(),
@@ -12,7 +29,7 @@ export const EventSchema = z.object({
   location: z.string().nullable(),
   starts_at: z.string(),
   ends_at: z.string().nullable(),
-  hero_image_url: z.string().url().nullable(),
+  hero_image_url: AssetUrlSchema.nullable(),
   is_published: z.boolean(),
 });
 

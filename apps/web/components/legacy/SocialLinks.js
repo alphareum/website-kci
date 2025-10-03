@@ -22,6 +22,7 @@ function getIconName(url) {
   if (lower.includes('tiktok')) return 'tiktok';
   if (lower.includes('youtube')) return 'youtube';
   if (lower.includes('facebook')) return 'facebook';
+  if (lower.includes('wa.me') || lower.includes('whatsapp')) return 'whatsapp';
   return 'link';
 }
 
@@ -64,6 +65,15 @@ function renderIcon(name) {
           <path fill="currentColor" d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H7v3h3v7h3v-7h3l1-3h-4V9c0-.6.4-1 1-1z" />
         </svg>
       );
+    case 'whatsapp':
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path
+            fill="currentColor"
+            d="M12.04 2a10 10 0 0 0-8.6 15.1L2 22l4.99-1.31A10 10 0 1 0 12.04 2zm5.74 14.4c-.24.67-1.38 1.3-1.89 1.32-.48.02-.97.24-3.28-.67-2.77-1.09-4.54-3.78-4.68-3.96-.13-.18-1.12-1.48-1.12-2.83s.71-2-.81-2.04c-.2-.01-.41-.03-.63-.03-.24 0-.49.01-.75.02a1.45 1.45 0 0 0-1.02.68 2.43 2.43 0 0 0-.32 1.26c0 .74.26 1.45.29 1.54.24.75.72 1.43.81 1.55.11.15 1.42 2.29 3.44 3.46 2.01 1.16 2.76 1.28 3.25 1.45.5.17.95.15 1.31.09.4-.06 1.23-.5 1.4-.98.17-.47.17-.88.12-.98-.05-.1-.19-.15-.4-.27z"
+          />
+        </svg>
+      );
     default:
       return (
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -82,7 +92,7 @@ export function SocialLinks() {
       socialGroup.map((link) => ({
         label: link.label,
         url: link.url ?? link.href,
-        icon: getIconName(link.url ?? link.href ?? ''),
+        icon: link.icon ?? getIconName(link.url ?? link.href ?? ''),
         id: link.id,
       })),
     [socialGroup],

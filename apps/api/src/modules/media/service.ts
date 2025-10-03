@@ -105,4 +105,15 @@ export class MediaService {
     await writeTable(TABLE, nextItems);
     return MediaItemSchema.parse(record);
   }
+
+  async deleteMedia(id: number) {
+    const items = await readTable<MediaItem>(TABLE);
+    const existing = items.find((item) => item.id === id);
+    if (!existing) {
+      throw new Error('Media item not found');
+    }
+    const filtered = items.filter((item) => item.id !== id);
+    await writeTable(TABLE, filtered);
+    return existing;
+  }
 }

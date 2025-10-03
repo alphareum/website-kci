@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import useSWR from 'swr';
 import MetadataEditor from '../../../components/MetadataEditor';
-import { apiGet, apiPost, apiUpload } from '../../../lib/api';
+import { apiDelete, apiGet, apiPost, apiUpload } from '../../../lib/api';
 
 const MEDIA_TYPES = [
   { type: 'gallery', label: 'Gallery' },
@@ -58,6 +58,7 @@ export default function MediaPage() {
   const [uploading, setUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
+  const [deletingId, setDeletingId] = useState(null);
 
   function resetUploadState() {
     setUploading(false);
@@ -264,6 +265,24 @@ export default function MediaPage() {
     }
   }
 
+  async function handleDelete(item) {
+    const confirmed = window.confirm(
+      `Remove "${item.title || item.asset_url}" from the media library? This cannot be undone.`,
+    );
+    if (!confirmed) {
+      return;
+    }
+    setDeletingId(item.id);
+    try {
+      await apiDelete(`/media/${item.id}`);
+      await mutate();
+    } catch (err) {
+      alert(err.message || 'Failed to delete media item');
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
   return (
     <section>
       <header className="action-bar">
@@ -304,17 +323,28 @@ export default function MediaPage() {
           {items.map((item) => (
             <div key={item.id} className="card">
               <div className="stack">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div>
+                <div
+                  style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem' }}
+                >
+                  <div className="stack" style={{ gap: '0.35rem' }}>
                     <h2 style={{ margin: 0 }}>{item.title || 'Untitled'}</h2>
-                    <p style={{ margin: '0.25rem 0', color: '#555' }}>{item.description || '—'}</p>
+                    <p style={{ margin: 0, color: '#555' }}>{item.description || '—'}</p>
                     <a href={item.asset_url} target="_blank" rel="noreferrer">
                       {item.asset_url}
                     </a>
                   </div>
-                  <button className="button secondary" onClick={() => openEdit(item)}>
-                    Edit
-                  </button>
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <button className="button secondary" onClick={() => openEdit(item)}>
+                      Edit
+                    </button>
+                    <button
+                      className="button secondary"
+                      onClick={() => handleDelete(item)}
+                      disabled={deletingId === item.id}
+                    >
+                      {deletingId === item.id ? 'Deleting…' : 'Delete'}
+                    </button>
+                  </div>
                 </div>
                 {item.metadata ? (
                   <div style={{ fontSize: '0.85rem', color: '#555' }}>
