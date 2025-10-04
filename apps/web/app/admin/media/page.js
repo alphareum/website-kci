@@ -129,9 +129,6 @@ export default function MediaPage() {
       if (metadata.storageKey) {
         nextMetadata.upload_storage_key = metadata.storageKey;
       }
-      if (metadata.publicUrl) {
-        nextMetadata.upload_public_url = metadata.publicUrl;
-      }
       if (metadata.folder) {
         nextMetadata.upload_folder = metadata.folder;
       }

@@ -18,7 +18,6 @@ const EnvSchema = z.object({
   SUPABASE_STORAGE_BUCKET: z.string().min(1).default('media-library'),
   LEGACY_MYSQL_DSN: z.string().optional(),
   DATA_DIR: z.string().default(defaultDataDir),
-  PUBLIC_BASE_URL: z.string().url().optional(),
 });
 
 type EnvVars = z.infer<typeof EnvSchema>;
