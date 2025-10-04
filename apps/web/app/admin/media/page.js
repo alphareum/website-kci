@@ -59,6 +59,7 @@ export default function MediaPage() {
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
   const [deletingId, setDeletingId] = useState(null);
+  const [confirmingItem, setConfirmingItem] = useState(null);
 
   function resetUploadState() {
     setUploading(false);
@@ -265,17 +266,26 @@ export default function MediaPage() {
     }
   }
 
-  async function handleDelete(item) {
-    const confirmed = window.confirm(
-      `Remove "${item.title || item.asset_url}" from the media library? This cannot be undone.`,
-    );
-    if (!confirmed) {
+  function requestDelete(item) {
+    setConfirmingItem(item);
+  }
+
+  function cancelDelete() {
+    if (deletingId) {
       return;
     }
-    setDeletingId(item.id);
+    setConfirmingItem(null);
+  }
+
+  async function confirmDelete() {
+    if (!confirmingItem) {
+      return;
+    }
+    setDeletingId(confirmingItem.id);
     try {
-      await apiDelete(`/media/${item.id}`);
+      await apiDelete(`/media/${confirmingItem.id}`);
       await mutate();
+      setConfirmingItem(null);
     } catch (err) {
       alert(err.message || 'Failed to delete media item');
     } finally {
@@ -339,7 +349,7 @@ export default function MediaPage() {
                     </button>
                     <button
                       className="button secondary"
-                      onClick={() => handleDelete(item)}
+                      onClick={() => requestDelete(item)}
                       disabled={deletingId === item.id}
                     >
                       {deletingId === item.id ? 'Deleting…' : 'Delete'}
@@ -361,6 +371,39 @@ export default function MediaPage() {
           ))}
         </div>
       )}
+
+      {confirmingItem ? (
+        <div className="modal-backdrop" role="dialog" aria-modal="true">
+          <div className="modal" style={{ maxWidth: '480px' }}>
+            <header className="stack" style={{ marginBottom: '1rem' }}>
+              <h2 style={{ margin: 0 }}>Remove asset?</h2>
+              <p style={{ margin: 0, color: '#555' }}>
+                Are you sure you want to remove &ldquo;
+                {confirmingItem.title || confirmingItem.asset_url}
+                &rdquo; from the media library? This action cannot be undone.
+              </p>
+            </header>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
+              <button
+                type="button"
+                className="button secondary"
+                onClick={cancelDelete}
+                disabled={Boolean(deletingId)}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="button"
+                onClick={confirmDelete}
+                disabled={Boolean(deletingId)}
+              >
+                {confirmingItem && deletingId === confirmingItem.id ? 'Deleting…' : 'Remove'}
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       {showModal ? (
         <div className="modal-backdrop" role="dialog" aria-modal="true">
