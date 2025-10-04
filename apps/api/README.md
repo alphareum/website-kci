@@ -6,9 +6,7 @@ When you're ready to plug in Supabase, provide the credentials in the `.env` fil
 and migrate the services to use the hosted tables.
 
 ## Getting started
-1. Copy `.env.example` to `.env`, adjust the `DATA_DIR` if needed, and point
-   `PUBLIC_BASE_URL` at the hostname that users will reach (for local
-   development the default `http://localhost:3000` is sufficient). Supabase
+1. Copy `.env.example` to `.env` and adjust the `DATA_DIR` if needed. Supabase
    variables are optional until you provision the project.
 2. Install dependencies from the repo root:
    ```bash
@@ -26,12 +24,3 @@ and migrate the services to use the hosted tables.
 ```bash
 npm --workspace apps-api run test
 ```
-
-### Verifying local media uploads
-
-When running without Supabase storage the API stores uploaded files beneath
-`apps/api/uploads` and serves them from the `/uploads/*` route. Make sure the
-`PUBLIC_BASE_URL` environment variable matches the public origin for the API so
-the admin console persists absolute URLs. After uploading a gallery,
-testimonial, or partner image, the asset should display immediately using the
-served `/uploads/` link.
