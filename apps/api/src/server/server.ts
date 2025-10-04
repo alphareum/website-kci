@@ -3,7 +3,6 @@ import cors from '@fastify/cors';
 import sensible from '@fastify/sensible';
 import { env } from '../config/env.js';
 import { registerRoutes } from '../routes/index.js';
-import { registerUploadsStatic } from './plugins/uploads-static.js';
 
 export async function buildServer() {
   const server = Fastify({
@@ -17,8 +16,6 @@ export async function buildServer() {
     origin: true,
     credentials: true,
   });
-
-  await server.register(registerUploadsStatic);
 
   server.get('/', async () => ({
     name: 'KCI CMS API',

@@ -17,7 +17,6 @@ const EnvSchema = z.object({
   SUPABASE_STORAGE_BUCKET: z.string().min(1).default('media-library'),
   LEGACY_MYSQL_DSN: z.string().optional(),
   DATA_DIR: z.string().default(defaultDataDir),
-  PUBLIC_BASE_URL: z.string().url().optional(),
 });
 
 type EnvVars = z.infer<typeof EnvSchema>;
@@ -30,8 +29,6 @@ if (!parsed.success) {
 }
 
 const envVars: EnvVars = parsed.data;
-const fallbackHost = envVars.API_HOST === '0.0.0.0' ? 'localhost' : envVars.API_HOST;
-const fallbackBaseUrl = `http://${fallbackHost}:${envVars.API_PORT}`;
 
 export const env = {
   nodeEnv: envVars.NODE_ENV,
@@ -39,7 +36,6 @@ export const env = {
     host: envVars.API_HOST,
     port: envVars.API_PORT,
   },
-  publicBaseUrl: envVars.PUBLIC_BASE_URL ?? fallbackBaseUrl,
   supabase: envVars.SUPABASE_URL && envVars.SUPABASE_SERVICE_ROLE_KEY
     ? {
         url: envVars.SUPABASE_URL,
