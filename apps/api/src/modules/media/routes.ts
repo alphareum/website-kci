@@ -3,16 +3,18 @@ import type { Multipart, MultipartValue } from '@fastify/multipart';
 import { randomUUID } from 'node:crypto';
 import { mkdir, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { FastifyInstance } from 'fastify';
 import { env } from '../../config/env.js';
 import { getSupabaseClient } from '../../lib/supabase.js';
+import {
+  UPLOADS_DIRECTORY,
+  buildUploadPublicPath,
+  buildUploadStorageKey,
+  isWithinUploadsRoot,
+  resolveUploadAbsolutePath,
+} from '../../lib/uploads.js';
 import type { MediaItem } from './service.js';
 import { MediaService, UpsertMediaSchema } from './service.js';
-
-const moduleDir = path.dirname(fileURLToPath(import.meta.url));
-const appsDir = path.resolve(moduleDir, '../../../..');
-const LOCAL_UPLOAD_ROOT = path.resolve(appsDir, 'web/public/uploads');
 
 function isMetadataRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
@@ -37,14 +39,15 @@ function buildFileName(originalName?: string) {
 }
 
 async function storeFileLocally(folder: string, fileName: string, buffer: Buffer) {
-  const targetDir = path.join(LOCAL_UPLOAD_ROOT, folder);
+  const targetDir = path.join(UPLOADS_DIRECTORY, folder);
   await mkdir(targetDir, { recursive: true });
   const targetPath = path.join(targetDir, fileName);
   await writeFile(targetPath, buffer);
-  const relativePath = `${folder}/${fileName}`;
+  const storageKey = buildUploadStorageKey(folder, fileName);
+  const publicUrl = new URL(buildUploadPublicPath(storageKey), env.publicBaseUrl).toString();
   return {
-    publicUrl: `/uploads/${relativePath}`,
-    storageKey: relativePath,
+    publicUrl,
+    storageKey,
   };
 }
 
@@ -128,6 +131,7 @@ export async function mediaRoutes(server: FastifyInstance) {
             ...baseMetadata,
             storage: 'supabase' as const,
             storageKey,
+            publicUrl,
           },
         };
       }
@@ -139,6 +143,7 @@ export async function mediaRoutes(server: FastifyInstance) {
           ...baseMetadata,
           storage: 'local' as const,
           storageKey,
+          publicUrl,
         },
       };
     } catch (error) {
@@ -180,7 +185,11 @@ async function removeStoredFile(server: FastifyInstance, item: MediaItem) {
   }
 
   if (storage === 'local') {
-    const targetPath = path.join(LOCAL_UPLOAD_ROOT, storageKey);
+    const targetPath = resolveUploadAbsolutePath(storageKey);
+    if (!isWithinUploadsRoot(targetPath)) {
+      server.log.warn({ storageKey }, 'Skipping removal of media file outside uploads root');
+      return;
+    }
     try {
       await unlink(targetPath);
     } catch (error) {
