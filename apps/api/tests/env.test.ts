@@ -6,6 +6,7 @@ vi.mock('dotenv', () => ({
 
 describe('environment configuration', () => {
   beforeEach(() => {
+    vi.resetModules();
     process.env = {
       NODE_ENV: 'test',
       API_HOST: '127.0.0.1',
@@ -18,7 +19,15 @@ describe('environment configuration', () => {
     const { env } = await import('../src/config/env.js');
     expect(env.server.port).toBe(4000);
     expect(env.server.host).toBe('127.0.0.1');
+    expect(env.publicBaseUrl).toBe('http://127.0.0.1:4000');
     expect(env.storage.dataDir).toBe('/tmp/kci-data');
     expect(env.supabase).toBeNull();
+  });
+
+  it('derives a localhost public base when binding to 0.0.0.0', async () => {
+    process.env.API_HOST = '0.0.0.0';
+    process.env.API_PORT = '5000';
+    const { env } = await import('../src/config/env.js');
+    expect(env.publicBaseUrl).toBe('http://localhost:5000');
   });
 });
