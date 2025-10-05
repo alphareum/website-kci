@@ -19,6 +19,7 @@ export async function buildServer() {
   await server.register(cors, {
     origin: true,
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   });
 
   // Serve uploaded files from /uploads route

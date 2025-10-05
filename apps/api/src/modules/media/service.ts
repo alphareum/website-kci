@@ -28,7 +28,7 @@ export const MediaItemSchema = z.object({
   title: z.string().nullable(),
   description: z.string().nullable(),
   asset_url: AssetUrlSchema,
-  metadata: z.record(z.any()).nullable(),
+  metadata: z.record(z.string(), z.any()).nullable(),
   created_at: z.string(),
 });
 

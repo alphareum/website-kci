@@ -4,12 +4,17 @@ async function request(path, options = {}) {
   const url = `${API_BASE}${path}`;
   const isFormData =
     typeof FormData !== 'undefined' && options.body instanceof FormData;
+  const hasBody = options.body !== undefined;
   const headers = isFormData
     ? {
         ...(options.headers || {}),
       }
-    : {
+    : hasBody
+    ? {
         'Content-Type': 'application/json',
+        ...(options.headers || {}),
+      }
+    : {
         ...(options.headers || {}),
       };
 
