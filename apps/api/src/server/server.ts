@@ -1,8 +1,12 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import sensible from '@fastify/sensible';
+import fastifyStatic from '@fastify/static';
+import path from 'node:path';
 import { env } from '../config/env.js';
 import { registerRoutes } from '../routes/index.js';
+
+const uploadsPath = path.join(env.storage.dataDir, 'uploads');
 
 export async function buildServer() {
   const server = Fastify({
@@ -15,6 +19,13 @@ export async function buildServer() {
   await server.register(cors, {
     origin: true,
     credentials: true,
+  });
+
+  // Serve uploaded files from /uploads route
+  await server.register(fastifyStatic, {
+    root: uploadsPath,
+    prefix: '/uploads/',
+    decorateReply: false,
   });
 
   server.get('/', async () => ({

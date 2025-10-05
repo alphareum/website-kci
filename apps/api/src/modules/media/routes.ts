@@ -3,16 +3,13 @@ import type { Multipart, MultipartValue } from '@fastify/multipart';
 import { randomUUID } from 'node:crypto';
 import { mkdir, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { FastifyInstance } from 'fastify';
 import { env } from '../../config/env.js';
 import { getSupabaseClient } from '../../lib/supabase.js';
 import type { MediaItem } from './service.js';
 import { MediaService, UpsertMediaSchema } from './service.js';
 
-const moduleDir = path.dirname(fileURLToPath(import.meta.url));
-const appsDir = path.resolve(moduleDir, '../../../..');
-const LOCAL_UPLOAD_ROOT = path.resolve(appsDir, 'web/public/uploads');
+const LOCAL_UPLOAD_ROOT = path.join(env.storage.dataDir, 'uploads');
 
 function isMetadataRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
@@ -42,8 +39,11 @@ async function storeFileLocally(folder: string, fileName: string, buffer: Buffer
   const targetPath = path.join(targetDir, fileName);
   await writeFile(targetPath, buffer);
   const relativePath = `${folder}/${fileName}`;
+  const publicUrl = env.publicBaseUrl
+    ? `${env.publicBaseUrl}/uploads/${relativePath}`
+    : `/uploads/${relativePath}`;
   return {
-    publicUrl: `/uploads/${relativePath}`,
+    publicUrl,
     storageKey: relativePath,
   };
 }
