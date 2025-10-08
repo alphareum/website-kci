@@ -119,6 +119,26 @@ textarea {
   font-weight: 600;
 }
 
+.input-group input,
+.input-group textarea,
+.input-group select {
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  background: #fff;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.input-group input:focus,
+.input-group textarea:focus,
+.input-group select:focus {
+  outline: none;
+  border-color: #b7001f;
+  box-shadow: 0 0 0 3px rgba(183, 0, 31, 0.1);
+}
+
 .tabs {
   display: inline-flex;
   gap: 0.5rem;
