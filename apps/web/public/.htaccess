@@ -1,0 +1,17 @@
+# Disable Passenger for /cms directory - serve static files only
+PassengerEnabled off
+
+# Default files to serve
+DirectoryIndex index.html
+
+# Rewrite engine
+RewriteEngine On
+
+# Map /admin/ to /admin.html
+RewriteRule ^admin/?$ /cms/admin.html [L]
+
+# Serve .html files without extension for other routes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.+)$ $1.html [L]

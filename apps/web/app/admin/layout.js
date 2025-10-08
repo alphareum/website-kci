@@ -12,6 +12,7 @@ const NAV_ITEMS = [
   { href: '/admin/contacts', label: 'Contacts' },
   { href: '/admin/links', label: 'Links' },
   { href: '/admin/messages', label: 'Messages' },
+  { href: '/admin/settings', label: 'Settings' },
 ];
 
 export default function AdminLayout({ children }) {

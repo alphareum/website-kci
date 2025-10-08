@@ -521,6 +521,24 @@ export default function MediaPage() {
                 />
               </div>
 
+              {draft.type === 'partner' ? (
+                <div className="input-group">
+                  <label htmlFor="partner-website">Website URL (Optional)</label>
+                  <input
+                    id="partner-website"
+                    type="url"
+                    value={draft.metadata?.website || ''}
+                    onChange={(event) =>
+                      updateField('metadata', { ...draft.metadata, website: event.target.value || undefined })
+                    }
+                    placeholder="https://instagram.com/partnername or https://example.com"
+                  />
+                  <span style={{ fontSize: '0.8rem', color: '#555' }}>
+                    Add a clickable link to the partner's website, Instagram, or social media. Leave empty if not needed.
+                  </span>
+                </div>
+              ) : null}
+
               <MetadataEditor value={draft.metadata} onChange={(metadata) => updateField('metadata', metadata)} />
 
               <div className="actions">
