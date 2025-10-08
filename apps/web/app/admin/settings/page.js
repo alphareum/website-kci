@@ -250,13 +250,13 @@ export default function SettingsPage() {
             </div>
 
             {/* Social Media Section */}
-            <div className="stack">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               <h2 style={{ margin: 0, fontSize: '1.25rem' }}>Social Media Links</h2>
               <p style={{ margin: 0, color: '#555', fontSize: '0.9rem' }}>
                 These links appear in the footer. Icons will only display for URLs that are provided.
               </p>
 
-              <div className="form-grid two-col">
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', gridAutoRows: 'auto' }}>
                 <div className="input-group">
                   <label htmlFor="social-facebook">Facebook URL</label>
                   <input
