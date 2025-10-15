@@ -17,6 +17,7 @@ function createEmptyEvent() {
     starts_at: toJakartaInputValue(new Date().toISOString()),
     ends_at: '',
     hero_image_url: '',
+    gallery_images: [],
     is_published: false,
   };
 }
@@ -31,6 +32,7 @@ export default function EventsPage() {
   const [draft, setDraft] = useState(() => createEmptyEvent());
   const [editingId, setEditingId] = useState(null);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [galleryPickerOpen, setGalleryPickerOpen] = useState(false);
   const heroImageLabelId = useId();
   const heroImageHelpId = `${heroImageLabelId}-help`;
 
@@ -48,6 +50,7 @@ export default function EventsPage() {
       description: event.description ?? '',
       location: event.location ?? '',
       hero_image_url: event.hero_image_url ?? '',
+      gallery_images: event.gallery_images ?? [],
       starts_at: toJakartaInputValue(event.starts_at),
       ends_at: toJakartaInputValue(event.ends_at),
     });
@@ -74,6 +77,20 @@ export default function EventsPage() {
     setPickerOpen(false);
   }
 
+  function handleGalleryMediaSelect(item) {
+    if (!item) {
+      return;
+    }
+    const newImages = [...(draft.gallery_images || []), item.asset_url];
+    updateField('gallery_images', newImages);
+    setGalleryPickerOpen(false);
+  }
+
+  function removeGalleryImage(index) {
+    const newImages = draft.gallery_images.filter((_, i) => i !== index);
+    updateField('gallery_images', newImages);
+  }
+
   async function handleSubmit(event) {
     event.preventDefault();
     setSaving(true);
@@ -87,6 +104,7 @@ export default function EventsPage() {
       description: draft.description || null,
       location: draft.location || null,
       hero_image_url: draft.hero_image_url || null,
+      gallery_images: draft.gallery_images || [],
       is_published: draft.is_published,
       starts_at: fromJakartaInputValue(draft.starts_at) ?? new Date().toISOString(),
       ends_at: draft.ends_at ? fromJakartaInputValue(draft.ends_at) : null,
@@ -111,6 +129,7 @@ export default function EventsPage() {
         description: eventRecord.description ?? null,
         location: eventRecord.location ?? null,
         hero_image_url: eventRecord.hero_image_url ?? null,
+        gallery_images: eventRecord.gallery_images ?? [],
         starts_at: eventRecord.starts_at,
         ends_at: eventRecord.ends_at,
         is_published: !eventRecord.is_published,
@@ -311,6 +330,79 @@ export default function EventsPage() {
                 </div>
               </div>
 
+              {/* Gallery Images Section */}
+              <div className="input-group">
+                <label>Gallery Images</label>
+                <p style={{ fontSize: '0.875rem', color: '#666', marginBottom: '0.75rem' }}>
+                  Add multiple images to create a photo gallery for this event.
+                </p>
+                <button
+                  type="button"
+                  className="button secondary"
+                  onClick={() => setGalleryPickerOpen(true)}
+                  style={{ marginBottom: '1rem' }}
+                >
+                  Add Image from Media Library
+                </button>
+
+                {draft.gallery_images && draft.gallery_images.length > 0 && (
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
+                    gap: '1rem',
+                    marginTop: '1rem'
+                  }}>
+                    {draft.gallery_images.map((imageUrl, index) => (
+                      <div
+                        key={index}
+                        style={{
+                          position: 'relative',
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '0.5rem',
+                          overflow: 'hidden'
+                        }}
+                      >
+                        <img
+                          src={imageUrl}
+                          alt={`Gallery image ${index + 1}`}
+                          style={{
+                            width: '100%',
+                            height: '150px',
+                            objectFit: 'cover',
+                            display: 'block'
+                          }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeGalleryImage(index)}
+                          style={{
+                            position: 'absolute',
+                            top: '0.5rem',
+                            right: '0.5rem',
+                            background: 'rgba(220, 38, 38, 0.9)',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '0.25rem',
+                            padding: '0.25rem 0.5rem',
+                            cursor: 'pointer',
+                            fontSize: '0.75rem',
+                            fontWeight: '600'
+                          }}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {(!draft.gallery_images || draft.gallery_images.length === 0) && (
+                  <p style={{ fontSize: '0.875rem', color: '#999', fontStyle: 'italic' }}>
+                    No gallery images added yet.
+                  </p>
+                )}
+              </div>
+
               <div className="form-grid two-col">
                 <div className="input-group">
                   <label htmlFor="starts_at">Starts at</label>
@@ -355,6 +447,7 @@ export default function EventsPage() {
         </div>
       ) : null}
       <MediaLibraryPicker open={pickerOpen} onClose={() => setPickerOpen(false)} onSelect={handleMediaSelect} />
+      <MediaLibraryPicker open={galleryPickerOpen} onClose={() => setGalleryPickerOpen(false)} onSelect={handleGalleryMediaSelect} />
     </section>
   );
 }

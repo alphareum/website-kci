@@ -30,6 +30,7 @@ export const EventSchema = z.object({
   starts_at: z.string(),
   ends_at: z.string().nullable(),
   hero_image_url: AssetUrlSchema.nullable(),
+  gallery_images: z.array(AssetUrlSchema).optional().default([]),
   is_published: z.boolean(),
 });
 
@@ -56,6 +57,7 @@ function buildEventRecord(id: number, input: UpsertEventInput, existing?: EventR
     starts_at: input.starts_at ?? existing?.starts_at ?? new Date().toISOString(),
     ends_at: input.ends_at ?? existing?.ends_at ?? null,
     hero_image_url: input.hero_image_url ?? existing?.hero_image_url ?? null,
+    gallery_images: input.gallery_images ?? existing?.gallery_images ?? [],
     is_published: input.is_published ?? existing?.is_published ?? false,
   };
 }
