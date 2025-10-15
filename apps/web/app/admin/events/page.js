@@ -91,6 +91,39 @@ export default function EventsPage() {
     updateField('gallery_images', newImages);
   }
 
+  async function handleGalleryFileUpload(event) {
+    const files = Array.from(event.target.files || []);
+    if (files.length === 0) return;
+
+    const previousSaving = saving;
+    setSaving(true);
+    setFormError('');
+
+    try {
+      const { apiUpload } = await import('../../../lib/api');
+
+      const uploadPromises = files.map(async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('type', 'events');
+
+        const response = await apiUpload('/media/upload', formData);
+        return response.url;
+      });
+
+      const uploadedUrls = await Promise.all(uploadPromises);
+      const newImages = [...(draft.gallery_images || []), ...uploadedUrls];
+      updateField('gallery_images', newImages);
+
+      // Reset file input
+      event.target.value = '';
+    } catch (err) {
+      setFormError(err.message || 'Failed to upload images');
+    } finally {
+      setSaving(previousSaving);
+    }
+  }
+
   async function handleSubmit(event) {
     event.preventDefault();
     setSaving(true);
@@ -336,14 +369,27 @@ export default function EventsPage() {
                 <p style={{ fontSize: '0.875rem', color: '#666', marginBottom: '0.75rem' }}>
                   Add multiple images to create a photo gallery for this event.
                 </p>
-                <button
-                  type="button"
-                  className="button secondary"
-                  onClick={() => setGalleryPickerOpen(true)}
-                  style={{ marginBottom: '1rem' }}
-                >
-                  Add Image from Media Library
-                </button>
+                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
+                  <button
+                    type="button"
+                    className="button secondary"
+                    onClick={() => setGalleryPickerOpen(true)}
+                    disabled={saving}
+                  >
+                    Add from Media Library
+                  </button>
+                  <label className="button secondary" style={{ cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.6 : 1 }}>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleGalleryFileUpload}
+                      style={{ display: 'none' }}
+                      disabled={saving}
+                    />
+                    {saving ? 'Uploading...' : 'Upload from Device'}
+                  </label>
+                </div>
 
                 {draft.gallery_images && draft.gallery_images.length > 0 && (
                   <div style={{
