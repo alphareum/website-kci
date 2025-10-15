@@ -7,6 +7,7 @@ import { messagingRoutes } from '../modules/messaging/routes.js';
 import { linksRoutes } from '../modules/links/routes.js';
 import { postsRoutes } from '../modules/posts/routes.js';
 import { settingsRoutes } from '../modules/settings/routes.js';
+import { profilesRoutes } from '../modules/profiles/routes.js';
 
 export async function registerRoutes(server: FastifyInstance) {
   await server.register(authRoutes, { prefix: '/auth' });
@@ -17,4 +18,5 @@ export async function registerRoutes(server: FastifyInstance) {
   await server.register(linksRoutes, { prefix: '/links' });
   await server.register(postsRoutes, { prefix: '/posts' });
   await server.register(settingsRoutes, { prefix: '/settings' });
+  await server.register(profilesRoutes);
 }
