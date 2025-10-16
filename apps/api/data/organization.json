@@ -1,0 +1,138 @@
+[
+  {
+    "founder": {
+      "name": "Joshua Robert Kurniawan",
+      "role": "Founder",
+      "instagram": "founderkci",
+      "photo": null
+    },
+    "cofounder": {
+      "name": "Jonathan Robert Kurniawan",
+      "role": "Co-Founder",
+      "instagram": "cofounderkci",
+      "photo": null
+    },
+    "divisions": [
+      {
+        "id": "pr-partnership",
+        "name": "Public Relations & Partnership Division",
+        "coordinator": {
+          "name": "Nama Koordinator",
+          "instagram": "koordinator.pr",
+          "photo": null
+        },
+        "members": [
+          {
+            "name": "Anggota 1",
+            "role": "Staff PR",
+            "photo": null
+          },
+          {
+            "name": "Anggota 2",
+            "role": "Staff Partnership",
+            "photo": null
+          },
+          {
+            "name": "Anggota 3",
+            "role": "Staff PR",
+            "photo": null
+          }
+        ]
+      },
+      {
+        "id": "media-comms",
+        "name": "Media & Communications Division",
+        "coordinator": {
+          "name": "Nama Koordinator",
+          "instagram": "koordinator.media",
+          "photo": null
+        },
+        "members": [
+          {
+            "name": "Anggota 1",
+            "role": "Content Creator",
+            "photo": null
+          },
+          {
+            "name": "Anggota 2",
+            "role": "Social Media Specialist",
+            "photo": null
+          }
+        ]
+      },
+      {
+        "id": "membership",
+        "name": "Membership & Community Engagement Division",
+        "coordinator": {
+          "name": "Nama Koordinator",
+          "instagram": "koordinator.membership",
+          "photo": null
+        },
+        "members": [
+          {
+            "name": "Anggota 1",
+            "role": "Membership Officer",
+            "photo": null
+          },
+          {
+            "name": "Anggota 2",
+            "role": "Community Engagement",
+            "photo": null
+          },
+          {
+            "name": "Anggota 3",
+            "role": "Member Relations",
+            "photo": null
+          }
+        ]
+      },
+      {
+        "id": "creative-event",
+        "name": "Creative & Event Division",
+        "coordinator": {
+          "name": "Nama Koordinator",
+          "instagram": "koordinator.event",
+          "photo": null
+        },
+        "members": [
+          {
+            "name": "Anggota 1",
+            "role": "Event Planner",
+            "photo": null
+          },
+          {
+            "name": "Anggota 2",
+            "role": "Creative Designer",
+            "photo": null
+          },
+          {
+            "name": "Anggota 3",
+            "role": "Event Coordinator",
+            "photo": null
+          }
+        ]
+      },
+      {
+        "id": "creative-support",
+        "name": "Creative Support Team",
+        "coordinator": {
+          "name": "Nama Koordinator",
+          "instagram": "koordinator.support",
+          "photo": null
+        },
+        "members": [
+          {
+            "name": "Anggota 1",
+            "role": "Graphic Designer",
+            "photo": null
+          },
+          {
+            "name": "Anggota 2",
+            "role": "Videographer",
+            "photo": null
+          }
+        ]
+      }
+    ]
+  }
+]
