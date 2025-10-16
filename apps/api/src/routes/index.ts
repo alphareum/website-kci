@@ -20,5 +20,5 @@ export async function registerRoutes(server: FastifyInstance) {
   await server.register(postsRoutes, { prefix: '/posts' });
   await server.register(settingsRoutes, { prefix: '/settings' });
   await server.register(profilesRoutes);
-  await server.register(organizationRoutes);
+  await server.register(organizationRoutes, { prefix: '/organization' });
 }
