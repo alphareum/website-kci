@@ -48,10 +48,30 @@ export async function profilesRoutes(fastify: FastifyInstance) {
     }
   });
 
-  // POST /api/admin/profiles - Create new profile (admin only)
+  // POST /api/admin/profiles - Create or update profile (UPSERT logic)
+  // CMS sends ID in body when editing, so we check for it
   fastify.post('/admin/profiles', async (request, reply) => {
     try {
-      const input = UpsertProfileInputSchema.parse(request.body);
+      const body = request.body as any;
+
+      // Check if this is an update (id provided in body)
+      if (body.id !== undefined && body.id !== null) {
+        const numId = parseInt(body.id, 10);
+        if (isNaN(numId)) {
+          return reply.status(400).send({ error: 'Invalid profile ID' });
+        }
+
+        // Extract input without the id field (API expects it without id)
+        const { id, ...inputWithoutId } = body;
+        const input = UpsertProfileInputSchema.parse(inputWithoutId);
+
+        // Update existing profile
+        const profile = await updateProfile(numId, input);
+        return reply.send({ profile });
+      }
+
+      // Create new profile
+      const input = UpsertProfileInputSchema.parse(body);
       const profile = await createProfile(input);
       return reply.status(201).send({ profile });
     } catch (error: any) {
@@ -59,7 +79,10 @@ export async function profilesRoutes(fastify: FastifyInstance) {
       if (error.name === 'ZodError') {
         return reply.status(400).send({ error: 'Invalid input', details: error.errors });
       }
-      return reply.status(500).send({ error: error.message || 'Failed to create profile' });
+      if (error.message.includes('not found')) {
+        return reply.status(404).send({ error: error.message });
+      }
+      return reply.status(500).send({ error: error.message || 'Failed to save profile' });
     }
   });
 
