@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 
 function toPairs(metadata) {
   if (!metadata || typeof metadata !== 'object') {
@@ -10,28 +10,42 @@ function toPairs(metadata) {
 }
 
 export default function MetadataEditor({ label = 'Metadata', value, onChange }) {
-  const pairs = useMemo(() => {
+  // Use local state for pairs to ensure proper updates
+  const [pairs, setPairs] = useState(() => {
     const current = toPairs(value);
     if (current.length === 0) {
       return [{ key: '', value: '' }];
     }
     return current;
+  });
+
+  // Sync pairs when value changes from parent
+  useEffect(() => {
+    const current = toPairs(value);
+    if (current.length > 0) {
+      setPairs(current);
+    }
   }, [value]);
 
   function updatePair(index, field, nextValue) {
     const nextPairs = pairs.map((pair, idx) =>
       idx === index ? { ...pair, [field]: nextValue } : pair
     );
+    setPairs(nextPairs);
     emit(nextPairs);
   }
 
   function addPair() {
-    emit([...pairs, { key: '', value: '' }]);
+    const nextPairs = [...pairs, { key: '', value: '' }];
+    setPairs(nextPairs);
+    // Don't emit yet, wait for user to fill in the key
   }
 
   function removePair(index) {
     const nextPairs = pairs.filter((_, idx) => idx !== index);
-    emit(nextPairs.length ? nextPairs : [{ key: '', value: '' }]);
+    const finalPairs = nextPairs.length ? nextPairs : [{ key: '', value: '' }];
+    setPairs(finalPairs);
+    emit(finalPairs);
   }
 
   function emit(pairsList) {
