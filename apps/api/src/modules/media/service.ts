@@ -29,6 +29,7 @@ export const MediaItemSchema = z.object({
   description: z.string().nullable(),
   asset_url: AssetUrlSchema,
   metadata: z.record(z.string(), z.any()).nullable(),
+  order: z.number().int().nullable().optional(),
   created_at: z.string(),
 });
 
@@ -72,6 +73,7 @@ function buildMediaRecord(id: number, input: UpsertMediaInput, existing?: MediaI
     description: input.description ?? existing?.description ?? null,
     asset_url: input.asset_url ?? existing?.asset_url ?? '',
     metadata: mergeMetadata(input.metadata, existing?.metadata),
+    order: input.order ?? existing?.order ?? null,
     created_at: existing?.created_at ?? new Date().toISOString(),
   };
 }
@@ -80,7 +82,15 @@ export class MediaService {
   async listByType(type: z.infer<typeof MediaTypeEnum>) {
     const items = await readTable<MediaItem>(TABLE);
     const filtered = items.filter((item) => item.type === type);
-    filtered.sort((a, b) => b.created_at.localeCompare(a.created_at));
+    // Sort by order first (ascending), then by created_at (descending)
+    filtered.sort((a, b) => {
+      const orderA = a.order ?? 999999;
+      const orderB = b.order ?? 999999;
+      if (orderA !== orderB) {
+        return orderA - orderB;
+      }
+      return b.created_at.localeCompare(a.created_at);
+    });
     return z.array(MediaItemSchema).parse(filtered);
   }
 
@@ -115,5 +125,61 @@ export class MediaService {
     const filtered = items.filter((item) => item.id !== id);
     await writeTable(TABLE, filtered);
     return existing;
+  }
+
+  async reorderMedia(id: number, direction: 'up' | 'down') {
+    const items = await readTable<MediaItem>(TABLE);
+    const current = items.find((item) => item.id === id);
+
+    if (!current) {
+      throw new Error('Media item not found');
+    }
+
+    // Get all items of the same type, sorted by order
+    const sameTypeItems = items
+      .filter((item) => item.type === current.type)
+      .sort((a, b) => {
+        const orderA = a.order ?? 999999;
+        const orderB = b.order ?? 999999;
+        if (orderA !== orderB) {
+          return orderA - orderB;
+        }
+        return b.created_at.localeCompare(a.created_at);
+      });
+
+    const currentIndex = sameTypeItems.findIndex((item) => item.id === id);
+
+    if (currentIndex === -1) {
+      throw new Error('Media item not found in same type list');
+    }
+
+    // Check bounds
+    if (direction === 'up' && currentIndex === 0) {
+      return; // Already at the top
+    }
+    if (direction === 'down' && currentIndex === sameTypeItems.length - 1) {
+      return; // Already at the bottom
+    }
+
+    // Find adjacent item to swap with
+    const adjacentIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+    const adjacentItem = sameTypeItems[adjacentIndex];
+
+    // Swap order values
+    const currentOrder = current.order ?? (currentIndex + 1);
+    const adjacentOrder = adjacentItem.order ?? (adjacentIndex + 1);
+
+    // Update both items
+    const updatedItems = items.map((item) => {
+      if (item.id === current.id) {
+        return { ...item, order: adjacentOrder };
+      }
+      if (item.id === adjacentItem.id) {
+        return { ...item, order: currentOrder };
+      }
+      return item;
+    });
+
+    await writeTable(TABLE, updatedItems);
   }
 }

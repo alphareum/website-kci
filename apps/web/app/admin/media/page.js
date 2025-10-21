@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import useSWR from 'swr';
 import MetadataEditor from '../../../components/MetadataEditor';
-import { apiDelete, apiGet, apiPost, apiUpload } from '../../../lib/api';
+import { apiDelete, apiGet, apiPatch, apiPost, apiUpload } from '../../../lib/api';
 
 const MEDIA_TYPES = [
   { type: 'gallery', label: 'Gallery' },
@@ -60,6 +60,7 @@ export default function MediaPage() {
   const fileInputRef = useRef(null);
   const [deletingId, setDeletingId] = useState(null);
   const [confirmingItem, setConfirmingItem] = useState(null);
+  const [reorderingId, setReorderingId] = useState(null);
 
   function resetUploadState() {
     setUploading(false);
@@ -293,6 +294,18 @@ export default function MediaPage() {
     }
   }
 
+  async function handleReorder(itemId, direction) {
+    setReorderingId(itemId);
+    try {
+      await apiPatch(`/media/${itemId}/reorder`, { direction });
+      await mutate();
+    } catch (err) {
+      alert(err.message || 'Failed to reorder item');
+    } finally {
+      setReorderingId(null);
+    }
+  }
+
   return (
     <section>
       <header className="action-bar">
@@ -330,7 +343,7 @@ export default function MediaPage() {
         <div className="empty-state">No media yet. Add your first item.</div>
       ) : (
         <div className="list">
-          {items.map((item) => (
+          {items.map((item, index) => (
             <div key={item.id} className="card">
               <div className="stack">
                 <div
@@ -343,7 +356,27 @@ export default function MediaPage() {
                       {item.asset_url}
                     </a>
                   </div>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                    {activeType === 'partner' && (
+                      <>
+                        <button
+                          className="button secondary"
+                          onClick={() => handleReorder(item.id, 'up')}
+                          disabled={index === 0 || reorderingId === item.id}
+                          title="Move up"
+                        >
+                          ↑
+                        </button>
+                        <button
+                          className="button secondary"
+                          onClick={() => handleReorder(item.id, 'down')}
+                          disabled={index === items.length - 1 || reorderingId === item.id}
+                          title="Move down"
+                        >
+                          ↓
+                        </button>
+                      </>
+                    )}
                     <button className="button secondary" onClick={() => openEdit(item)}>
                       Edit
                     </button>

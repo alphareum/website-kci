@@ -164,6 +164,23 @@ export async function mediaRoutes(server: FastifyInstance) {
     await removeStoredFile(server, removed);
     return { success: true };
   });
+
+  server.patch('/:id/reorder', async (request) => {
+    const { id } = request.params as { id: string };
+    const { direction } = request.body as { direction: 'up' | 'down' };
+
+    const numericId = Number(id);
+    if (!Number.isFinite(numericId) || numericId <= 0) {
+      throw server.httpErrors.badRequest('Invalid media id');
+    }
+
+    if (direction !== 'up' && direction !== 'down') {
+      throw server.httpErrors.badRequest('Direction must be "up" or "down"');
+    }
+
+    await service.reorderMedia(numericId, direction);
+    return { success: true };
+  });
 }
 
 async function removeStoredFile(server: FastifyInstance, item: MediaItem) {

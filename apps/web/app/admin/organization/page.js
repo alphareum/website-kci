@@ -450,9 +450,11 @@ export default function OrganizationPage() {
       </form>
 
       {/* Media Library Picker Modal */}
-      {pickerOpen && (
-        <MediaLibraryPicker onSelect={handleMediaSelect} onClose={closeMediaPicker} />
-      )}
+      <MediaLibraryPicker
+        open={pickerOpen}
+        onSelect={handleMediaSelect}
+        onClose={closeMediaPicker}
+      />
     </section>
   );
 }
