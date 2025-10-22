@@ -5,8 +5,9 @@ import fastifyStatic from '@fastify/static';
 import path from 'node:path';
 import { env } from '../config/env.js';
 import { registerRoutes } from '../routes/index.js';
+import { sitemapRoutes } from '../modules/sitemap/routes.js';
 
-const uploadsPath = path.join(env.storage.dataDir, 'uploads');
+const uploadsPath = path.resolve(env.storage.dataDir, 'uploads');
 
 export async function buildServer() {
   const server = Fastify({
@@ -38,6 +39,9 @@ export async function buildServer() {
   }));
 
   server.get('/healthz', async () => ({ status: 'ok' }));
+
+  // Register sitemap route (must be before /api prefix)
+  await server.register(sitemapRoutes);
 
   await server.register(registerRoutes, { prefix: '/api' });
 

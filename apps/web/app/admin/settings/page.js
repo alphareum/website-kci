@@ -256,60 +256,60 @@ export default function SettingsPage() {
                 These links appear in the footer. Icons will only display for URLs that are provided.
               </p>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                  <label htmlFor="social-facebook" style={{ fontWeight: 600 }}>Facebook URL</label>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', width: '100%' }}>
+                <div style={{ display: 'block', visibility: 'visible', opacity: 1, minHeight: '80px' }}>
+                  <label htmlFor="social-facebook" style={{ display: 'block', fontWeight: 600, marginBottom: '0.35rem' }}>Facebook URL</label>
                   <input
                     id="social-facebook"
                     type="url"
                     value={draft.social_facebook || ''}
                     onChange={(event) => updateField('social_facebook', event.target.value)}
                     placeholder="https://facebook.com/kciindonesia"
-                    style={{ width: '100%', padding: '0.625rem 0.75rem', border: '1px solid #d1d5db', borderRadius: '0.375rem', background: '#fff', fontSize: '0.875rem' }}
+                    style={{ display: 'block', visibility: 'visible', width: '100%', padding: '0.625rem 0.75rem', border: '1px solid #d1d5db', borderRadius: '0.375rem', background: '#fff', fontSize: '0.875rem', opacity: 1 }}
                   />
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                  <label htmlFor="social-instagram" style={{ fontWeight: 600 }}>Instagram URL</label>
+                <div style={{ display: 'block', visibility: 'visible', opacity: 1, minHeight: '80px' }}>
+                  <label htmlFor="social-instagram" style={{ display: 'block', fontWeight: 600, marginBottom: '0.35rem' }}>Instagram URL</label>
                   <input
                     id="social-instagram"
                     type="url"
                     value={draft.social_instagram || ''}
                     onChange={(event) => updateField('social_instagram', event.target.value)}
                     placeholder="https://instagram.com/kciindonesia"
-                    style={{ width: '100%', padding: '0.625rem 0.75rem', border: '1px solid #d1d5db', borderRadius: '0.375rem', background: '#fff', fontSize: '0.875rem' }}
+                    style={{ display: 'block', visibility: 'visible', width: '100%', padding: '0.625rem 0.75rem', border: '1px solid #d1d5db', borderRadius: '0.375rem', background: '#fff', fontSize: '0.875rem', opacity: 1 }}
                   />
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                  <label htmlFor="social-tiktok" style={{ fontWeight: 600 }}>TikTok URL</label>
+                <div style={{ display: 'block', visibility: 'visible', opacity: 1, minHeight: '80px' }}>
+                  <label htmlFor="social-tiktok" style={{ display: 'block', fontWeight: 600, marginBottom: '0.35rem' }}>TikTok URL</label>
                   <input
                     id="social-tiktok"
                     type="url"
                     value={draft.social_tiktok || ''}
                     onChange={(event) => updateField('social_tiktok', event.target.value)}
                     placeholder="https://tiktok.com/@kciindonesia"
-                    style={{ width: '100%', padding: '0.625rem 0.75rem', border: '1px solid #d1d5db', borderRadius: '0.375rem', background: '#fff', fontSize: '0.875rem' }}
+                    style={{ display: 'block', visibility: 'visible', width: '100%', padding: '0.625rem 0.75rem', border: '1px solid #d1d5db', borderRadius: '0.375rem', background: '#fff', fontSize: '0.875rem', opacity: 1 }}
                   />
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                  <label htmlFor="social-threads" style={{ fontWeight: 600 }}>Threads URL</label>
+                <div style={{ display: 'block', visibility: 'visible', opacity: 1, minHeight: '80px' }}>
+                  <label htmlFor="social-threads" style={{ display: 'block', fontWeight: 600, marginBottom: '0.35rem' }}>Threads URL</label>
                   <input
                     id="social-threads"
                     type="url"
                     value={draft.social_threads || ''}
                     onChange={(event) => updateField('social_threads', event.target.value)}
                     placeholder="https://threads.net/@kciindonesia"
-                    style={{ width: '100%', padding: '0.625rem 0.75rem', border: '1px solid #d1d5db', borderRadius: '0.375rem', background: '#fff', fontSize: '0.875rem' }}
+                    style={{ display: 'block', visibility: 'visible', width: '100%', padding: '0.625rem 0.75rem', border: '1px solid #d1d5db', borderRadius: '0.375rem', background: '#fff', fontSize: '0.875rem', opacity: 1 }}
                   />
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                  <label htmlFor="social-youtube" style={{ fontWeight: 600 }}>YouTube URL</label>
+                <div style={{ display: 'block', visibility: 'visible', opacity: 1, minHeight: '80px' }}>
+                  <label htmlFor="social-youtube" style={{ display: 'block', fontWeight: 600, marginBottom: '0.35rem' }}>YouTube URL</label>
                   <input
                     id="social-youtube"
                     type="url"
                     value={draft.social_youtube || ''}
                     onChange={(event) => updateField('social_youtube', event.target.value)}
                     placeholder="https://youtube.com/@kciindonesia"
-                    style={{ width: '100%', padding: '0.625rem 0.75rem', border: '1px solid #d1d5db', borderRadius: '0.375rem', background: '#fff', fontSize: '0.875rem' }}
+                    style={{ display: 'block', visibility: 'visible', width: '100%', padding: '0.625rem 0.75rem', border: '1px solid #d1d5db', borderRadius: '0.375rem', background: '#fff', fontSize: '0.875rem', opacity: 1 }}
                   />
                 </div>
               </div>

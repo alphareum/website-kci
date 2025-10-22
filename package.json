@@ -9,8 +9,13 @@
     "scripts/*"
   ],
   "scripts": {
-    "dev:api": "npm --workspace apps-api run dev",
+    "dev:api": "npm run dev -w apps/api",
+    "dev:web": "npm run dev -w apps/web",
+    "admin:reset": "node tools/reset-admin.js pbkdf2 admin@example.com dev12345",
+    "admin:reset:sha": "node tools/reset-admin.js sha512 admin@example.com dev12345",
+    "admin:reset:sha:ps": "node tools/reset-admin.js sha512:ps admin@example.com dev12345",
     "build": "npm run build --workspaces",
     "lint": "echo 'TODO: add lint step'"
   }
 }
+

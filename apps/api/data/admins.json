@@ -4,7 +4,7 @@
     "email": "admin@example.com",
     "full_name": "Site Owner",
     "role": "owner",
-    "password_hash": "4a98bb1c913a03d6203767ac889f8ac5:4aaf84c777cea6191b38ecde83dc51b1ce809c853986e2c720c84c2d48795b8ed7827177c52374696131fa71ed2d47c9c42925027524e8d3432d83e959eebecb",
+    "password_hash": "9cf75634424bd673380c7bc00f879957:620f95a047f287befabf28233d31f74c0381f621a41345c85d80eded081d375b78757cafe8bcfc14bd04c1d051ec048fbb0799ee7fa256945e20a159e8771629",
     "last_login_at": "2025-09-27T11:09:03.079Z"
   }
 ]
