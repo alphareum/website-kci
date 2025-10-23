@@ -10,6 +10,7 @@ function createEmptyMember() {
     name: '',
     role: '',
     photo: null,
+    profileSlug: null,
   };
 }
 
@@ -21,6 +22,7 @@ function createEmptyDivision() {
       name: '',
       instagram: '',
       photo: null,
+      profileSlug: null,
     },
     members: [createEmptyMember()],
   };
@@ -29,6 +31,10 @@ function createEmptyDivision() {
 export default function OrganizationPage() {
   const { data, error, isLoading, mutate } = useSWR('/organization', () => apiGet('/organization'));
   const organization = useMemo(() => data?.organization ?? null, [data]);
+
+  // Fetch available profiles for dropdown
+  const { data: profilesData } = useSWR('/profiles', () => apiGet('/profiles'));
+  const availableProfiles = useMemo(() => profilesData?.profiles ?? [], [profilesData]);
 
   const [draft, setDraft] = useState(null);
   const [formError, setFormError] = useState('');
@@ -242,6 +248,29 @@ export default function OrganizationPage() {
                   </div>
                 )}
               </div>
+              <div className="form-group">
+                <label htmlFor="founder-profile">
+                  Profile Link {draft.founder.profileSlug && <span style={{ color: '#10b981', marginLeft: '0.5rem' }}>✓ Linked</span>}
+                </label>
+                <select
+                  id="founder-profile"
+                  value={draft.founder.profileSlug || ''}
+                  onChange={(e) => updateFounder('profileSlug', e.target.value || null)}
+                  style={{ width: '100%' }}
+                >
+                  <option value="">None (No profile)</option>
+                  {availableProfiles.map((profile) => (
+                    <option key={profile.id} value={profile.slug}>
+                      {profile.name} ({profile.slug})
+                    </option>
+                  ))}
+                </select>
+                {draft.founder.profileSlug && (
+                  <span style={{ fontSize: '0.8rem', color: '#555', marginTop: '0.25rem', display: 'block' }}>
+                    Profile URL: /portfolio/{draft.founder.profileSlug}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
 
@@ -292,6 +321,29 @@ export default function OrganizationPage() {
                   <div style={{ marginTop: '0.5rem' }}>
                     <img src={draft.cofounder.photo} alt="Co-Founder" style={{ maxWidth: '100px', borderRadius: '8px' }} />
                   </div>
+                )}
+              </div>
+              <div className="form-group">
+                <label htmlFor="cofounder-profile">
+                  Profile Link {draft.cofounder.profileSlug && <span style={{ color: '#10b981', marginLeft: '0.5rem' }}>✓ Linked</span>}
+                </label>
+                <select
+                  id="cofounder-profile"
+                  value={draft.cofounder.profileSlug || ''}
+                  onChange={(e) => updateCofounder('profileSlug', e.target.value || null)}
+                  style={{ width: '100%' }}
+                >
+                  <option value="">None (No profile)</option>
+                  {availableProfiles.map((profile) => (
+                    <option key={profile.id} value={profile.slug}>
+                      {profile.name} ({profile.slug})
+                    </option>
+                  ))}
+                </select>
+                {draft.cofounder.profileSlug && (
+                  <span style={{ fontSize: '0.8rem', color: '#555', marginTop: '0.25rem', display: 'block' }}>
+                    Profile URL: /portfolio/{draft.cofounder.profileSlug}
+                  </span>
                 )}
               </div>
             </div>
@@ -371,6 +423,28 @@ export default function OrganizationPage() {
                         </div>
                       )}
                     </div>
+                    <div className="form-group">
+                      <label>
+                        Profile Link {division.coordinator.profileSlug && <span style={{ color: '#10b981', marginLeft: '0.5rem' }}>✓ Linked</span>}
+                      </label>
+                      <select
+                        value={division.coordinator.profileSlug || ''}
+                        onChange={(e) => updateCoordinator(divIndex, 'profileSlug', e.target.value || null)}
+                        style={{ width: '100%' }}
+                      >
+                        <option value="">None (No profile)</option>
+                        {availableProfiles.map((profile) => (
+                          <option key={profile.id} value={profile.slug}>
+                            {profile.name} ({profile.slug})
+                          </option>
+                        ))}
+                      </select>
+                      {division.coordinator.profileSlug && (
+                        <span style={{ fontSize: '0.8rem', color: '#555', marginTop: '0.25rem', display: 'block' }}>
+                          Profile URL: /portfolio/{division.coordinator.profileSlug}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
 
@@ -432,6 +506,28 @@ export default function OrganizationPage() {
                             <div style={{ marginTop: '0.5rem' }}>
                               <img src={member.photo} alt="Member" style={{ maxWidth: '60px', borderRadius: '8px' }} />
                             </div>
+                          )}
+                        </div>
+                        <div className="form-group">
+                          <label>
+                            Profile Link {member.profileSlug && <span style={{ color: '#10b981', marginLeft: '0.5rem' }}>✓ Linked</span>}
+                          </label>
+                          <select
+                            value={member.profileSlug || ''}
+                            onChange={(e) => updateMember(divIndex, memIndex, 'profileSlug', e.target.value || null)}
+                            style={{ width: '100%' }}
+                          >
+                            <option value="">None (No profile)</option>
+                            {availableProfiles.map((profile) => (
+                              <option key={profile.id} value={profile.slug}>
+                                {profile.name} ({profile.slug})
+                              </option>
+                            ))}
+                          </select>
+                          {member.profileSlug && (
+                            <span style={{ fontSize: '0.8rem', color: '#555', marginTop: '0.25rem', display: 'block' }}>
+                              Profile URL: /portfolio/{member.profileSlug}
+                            </span>
                           )}
                         </div>
                       </div>
