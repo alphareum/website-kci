@@ -1,0 +1,96 @@
+[
+  {
+    "id": 2,
+    "type": "partner",
+    "title": "basreng",
+    "description": "basreng",
+    "asset_url": "https://imgur.com/a/HOzj7Kt",
+    "metadata": null,
+    "created_at": "2025-09-28T16:00:35.113Z"
+  },
+  {
+    "id": 8,
+    "type": "partner",
+    "title": "a",
+    "description": null,
+    "asset_url": "/uploads/partner/1759120908545-23299cf7-9f01-4f11-8f48-2fb54ff9be22.png",
+    "metadata": {
+      "uploaded_file_url": "/uploads/partner/1759120908545-23299cf7-9f01-4f11-8f48-2fb54ff9be22.png",
+      "original_filename": "Screenshot 2025-08-19 113431.png",
+      "upload_mime_type": "image/png",
+      "upload_file_size": "100555",
+      "upload_storage": "local",
+      "upload_storage_key": "partner/1759120908545-23299cf7-9f01-4f11-8f48-2fb54ff9be22.png",
+      "upload_folder": "partner"
+    },
+    "created_at": "2025-09-29T04:41:50.565Z"
+  },
+  {
+    "id": 9,
+    "type": "gallery",
+    "title": "reze",
+    "description": null,
+    "asset_url": "/uploads/gallery/1759569565265-53e11a1d-87a5-452f-af36-723d98e4922e.png",
+    "metadata": {
+      "uploaded_file_url": "/uploads/gallery/1759569565265-53e11a1d-87a5-452f-af36-723d98e4922e.png",
+      "original_filename": "Screenshot 2025-10-04 144540.png",
+      "upload_mime_type": "image/png",
+      "upload_file_size": "149878",
+      "upload_storage": "local",
+      "upload_storage_key": "gallery/1759569565265-53e11a1d-87a5-452f-af36-723d98e4922e.png",
+      "upload_folder": "gallery"
+    },
+    "created_at": "2025-10-04T09:19:29.803Z"
+  },
+  {
+    "id": 10,
+    "type": "gallery",
+    "title": "a",
+    "description": "a",
+    "asset_url": "/uploads/gallery/1759569629405-95f8ed94-72e5-4294-b44a-f54984ef1085.png",
+    "metadata": {
+      "uploaded_file_url": "/uploads/gallery/1759569629405-95f8ed94-72e5-4294-b44a-f54984ef1085.png",
+      "original_filename": "Screenshot 2025-09-29 115102.png",
+      "upload_mime_type": "image/png",
+      "upload_file_size": "26046",
+      "upload_storage": "local",
+      "upload_storage_key": "gallery/1759569629405-95f8ed94-72e5-4294-b44a-f54984ef1085.png",
+      "upload_folder": "gallery"
+    },
+    "created_at": "2025-10-04T09:20:31.500Z"
+  },
+  {
+    "id": 11,
+    "type": "gallery",
+    "title": "check",
+    "description": null,
+    "asset_url": "/uploads/gallery/1759569653004-0a06a50e-6f40-4ad2-ba8f-b2d7ecc0598c.png",
+    "metadata": {
+      "uploaded_file_url": "/uploads/gallery/1759569653004-0a06a50e-6f40-4ad2-ba8f-b2d7ecc0598c.png",
+      "original_filename": "Screenshot 2025-10-04 153213.png",
+      "upload_mime_type": "image/png",
+      "upload_file_size": "15297",
+      "upload_storage": "local",
+      "upload_storage_key": "gallery/1759569653004-0a06a50e-6f40-4ad2-ba8f-b2d7ecc0598c.png",
+      "upload_folder": "gallery"
+    },
+    "created_at": "2025-10-04T09:20:54.721Z"
+  },
+  {
+    "id": 12,
+    "type": "gallery",
+    "title": "reze",
+    "description": null,
+    "asset_url": "http://localhost:3001/uploads/gallery/1759585585939-7c08371b-77a1-4295-ae5a-13c89617e8e1.png",
+    "metadata": {
+      "uploaded_file_url": "http://localhost:3001/uploads/gallery/1759585585939-7c08371b-77a1-4295-ae5a-13c89617e8e1.png",
+      "original_filename": "Screenshot 2025-10-04 144540.png",
+      "upload_mime_type": "image/png",
+      "upload_file_size": "149878",
+      "upload_storage": "local",
+      "upload_storage_key": "gallery/1759585585939-7c08371b-77a1-4295-ae5a-13c89617e8e1.png",
+      "upload_folder": "gallery"
+    },
+    "created_at": "2025-10-04T13:46:27.357Z"
+  }
+]

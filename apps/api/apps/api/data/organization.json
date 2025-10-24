@@ -4,15 +4,13 @@
       "name": "Joshua Robert Kurniawan",
       "role": "Founder",
       "instagram": "founderkci",
-      "photo": null,
-      "profileSlug": "joshua"
+      "photo": null
     },
     "cofounder": {
       "name": "Jonathan Robert Kurniawan",
       "role": "Co-Founder",
       "instagram": "cofounderkci",
-      "photo": null,
-      "profileSlug": null
+      "photo": null
     },
     "divisions": [
       {
@@ -21,27 +19,23 @@
         "coordinator": {
           "name": "Nama Koordinator",
           "instagram": "koordinator.pr",
-          "photo": null,
-          "profileSlug": null
+          "photo": null
         },
         "members": [
           {
             "name": "Anggota 1",
             "role": "Staff PR",
-            "photo": null,
-            "profileSlug": null
+            "photo": null
           },
           {
             "name": "Anggota 2",
             "role": "Staff Partnership",
-            "photo": null,
-            "profileSlug": null
+            "photo": null
           },
           {
             "name": "Anggota 3",
             "role": "Staff PR",
-            "photo": null,
-            "profileSlug": null
+            "photo": null
           }
         ]
       },
@@ -51,21 +45,18 @@
         "coordinator": {
           "name": "Nama Koordinator",
           "instagram": "koordinator.media",
-          "photo": null,
-          "profileSlug": null
+          "photo": null
         },
         "members": [
           {
             "name": "Anggota 1",
             "role": "Content Creator",
-            "photo": null,
-            "profileSlug": null
+            "photo": null
           },
           {
             "name": "Anggota 2",
             "role": "Social Media Specialist",
-            "photo": null,
-            "profileSlug": null
+            "photo": null
           }
         ]
       },
@@ -75,27 +66,23 @@
         "coordinator": {
           "name": "Nama Koordinator",
           "instagram": "koordinator.membership",
-          "photo": null,
-          "profileSlug": null
+          "photo": null
         },
         "members": [
           {
             "name": "Anggota 1",
             "role": "Membership Officer",
-            "photo": null,
-            "profileSlug": null
+            "photo": null
           },
           {
             "name": "Anggota 2",
             "role": "Community Engagement",
-            "photo": null,
-            "profileSlug": null
+            "photo": null
           },
           {
             "name": "Anggota 3",
             "role": "Member Relations",
-            "photo": null,
-            "profileSlug": null
+            "photo": null
           }
         ]
       },
@@ -105,27 +92,23 @@
         "coordinator": {
           "name": "Nama Koordinator",
           "instagram": "koordinator.event",
-          "photo": null,
-          "profileSlug": null
+          "photo": null
         },
         "members": [
           {
             "name": "Anggota 1",
             "role": "Event Planner",
-            "photo": null,
-            "profileSlug": null
+            "photo": null
           },
           {
             "name": "Anggota 2",
             "role": "Creative Designer",
-            "photo": null,
-            "profileSlug": null
+            "photo": null
           },
           {
             "name": "Anggota 3",
             "role": "Event Coordinator",
-            "photo": null,
-            "profileSlug": null
+            "photo": null
           }
         ]
       },
@@ -135,21 +118,18 @@
         "coordinator": {
           "name": "Nama Koordinator",
           "instagram": "koordinator.support",
-          "photo": null,
-          "profileSlug": null
+          "photo": null
         },
         "members": [
           {
             "name": "Anggota 1",
             "role": "Graphic Designer",
-            "photo": null,
-            "profileSlug": null
+            "photo": null
           },
           {
             "name": "Anggota 2",
             "role": "Videographer",
-            "photo": null,
-            "profileSlug": null
+            "photo": null
           }
         ]
       }

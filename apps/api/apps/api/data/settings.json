@@ -1,0 +1,20 @@
+[
+  {
+    "contact_email": "info@kci-indonesia.org",
+    "contact_address": "Jakarta, Indonesia",
+    "whatsapp_admin_label": "WhatsApp Admin",
+    "whatsapp_admin_number": "+62 812-3456-7890",
+    "whatsapp_admin_link": "https://wa.me/628123456789",
+    "whatsapp_founder_label": "WhatsApp Founder",
+    "whatsapp_founder_number": "+62 812-3456-7891",
+    "whatsapp_founder_link": "https://wa.me/628123456791",
+    "whatsapp_cofounder_label": "WhatsApp Co-Founder",
+    "whatsapp_cofounder_number": "+62 812-3456-7892",
+    "whatsapp_cofounder_link": "https://wa.me/628123456792",
+    "social_facebook": null,
+    "social_instagram": null,
+    "social_tiktok": null,
+    "social_threads": null,
+    "social_youtube": null
+  }
+]

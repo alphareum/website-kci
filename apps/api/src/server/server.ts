@@ -1,4 +1,5 @@
 import Fastify from 'fastify';
+import cookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 import sensible from '@fastify/sensible';
 import fastifyStatic from '@fastify/static';
@@ -13,6 +14,20 @@ export async function buildServer() {
   const server = Fastify({
     logger: {
       level: env.nodeEnv === 'development' ? 'debug' : 'info',
+    },
+  });
+
+  // Register cookie plugin for session management
+  await server.register(cookie, {
+    secret: env.nodeEnv === 'production'
+      ? process.env.COOKIE_SECRET || 'kci-cookie-secret-change-in-production'
+      : 'dev-cookie-secret',
+    hook: 'onRequest',
+    parseOptions: {
+      httpOnly: true,
+      secure: env.nodeEnv === 'production',
+      sameSite: 'strict',
+      path: '/',
     },
   });
 
