@@ -4,6 +4,7 @@ import { randomUUID } from 'node:crypto';
 import { mkdir, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { FastifyInstance } from 'fastify';
+import { requireSession } from '../../middleware/require-session.js';
 import { env } from '../../config/env.js';
 import { getSupabaseClient } from '../../lib/supabase.js';
 import type { MediaItem } from './service.js';
@@ -90,7 +91,7 @@ export async function mediaRoutes(server: FastifyInstance) {
     return { items };
   });
 
-  server.post('/upload', async (request) => {
+  server.post('/upload', { preHandler: requireSession }, async (request) => {
     const file = await request.file();
 
     if (!file) {
@@ -147,13 +148,13 @@ export async function mediaRoutes(server: FastifyInstance) {
     }
   });
 
-  server.post('/', async (request) => {
+  server.post('/', { preHandler: requireSession }, async (request) => {
     const payload = UpsertMediaSchema.parse(request.body);
     const item = await service.upsertMedia(payload);
     return { item };
   });
 
-  server.delete('/:id', async (request) => {
+  server.delete('/:id', { preHandler: requireSession }, async (request) => {
     const { id } = request.params as { id: string };
     const numericId = Number(id);
     if (!Number.isFinite(numericId) || numericId <= 0) {
@@ -165,7 +166,7 @@ export async function mediaRoutes(server: FastifyInstance) {
     return { success: true };
   });
 
-  server.patch('/:id/reorder', async (request) => {
+  server.patch('/:id/reorder', { preHandler: requireSession }, async (request) => {
     const { id } = request.params as { id: string };
     const { direction } = request.body as { direction: 'up' | 'down' };
 

@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "title": "Test Post",
+    "slug": "test-post-checkpoint-5",
+    "summary": "Test summary",
+    "body": "Test body",
+    "cover_image_url": "https://example.com/image.jpg",
+    "published_at": "2025-10-24T09:06:43.607Z",
+    "is_published": false
+  }
+]

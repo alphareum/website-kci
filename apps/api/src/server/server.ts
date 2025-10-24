@@ -7,6 +7,7 @@ import path from 'node:path';
 import { env } from '../config/env.js';
 import { registerRoutes } from '../routes/index.js';
 import { sitemapRoutes } from '../modules/sitemap/routes.js';
+import { cleanupExpiredSessions } from '../lib/session-store.js';
 
 const uploadsPath = path.resolve(env.storage.dataDir, 'uploads');
 
@@ -64,6 +65,16 @@ export async function buildServer() {
     status: 'ok',
     message: 'Use /api/<module> to access CMS resources such as /api/media or /api/events.',
   }));
+
+  // Cleanup expired sessions on startup
+  server.addHook('onReady', async () => {
+    try {
+      const count = await cleanupExpiredSessions();
+      server.log.info({ cleanedSessions: count }, 'Cleaned up expired sessions on startup');
+    } catch (error) {
+      server.log.error({ error }, 'Failed to cleanup expired sessions on startup');
+    }
+  });
 
   return server;
 }

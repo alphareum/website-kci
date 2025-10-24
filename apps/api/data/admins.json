@@ -6,5 +6,21 @@
     "role": "owner",
     "password_hash": "9cf75634424bd673380c7bc00f879957:620f95a047f287befabf28233d31f74c0381f621a41345c85d80eded081d375b78757cafe8bcfc14bd04c1d051ec048fbb0799ee7fa256945e20a159e8771629",
     "last_login_at": "2025-09-27T11:09:03.079Z"
+  },
+  {
+    "id": 2,
+    "email": "test@test.com",
+    "full_name": "Test Admin",
+    "role": "owner",
+    "password_hash": "ea692cce2023d8275fef9f5a4cd632c5:b368d105f8d78d92e26c757b984993682c2cc195368ce8fd70fd7d85aaa1bc6d9183d3d7a22efe3fe39bbb411298df1e2273008a885727ac5fde439abd9ba56f",
+    "last_login_at": "2025-10-24T11:10:06.796Z"
+  },
+  {
+    "id": 3,
+    "email": "test@test.com",
+    "full_name": "Test Admin",
+    "role": "owner",
+    "password_hash": "460c73a8de82edfa9fe2600a09c30b1f:4a8eeeca2008e2615ab473b213890df95be46d008804d254b2a39fd49435060ceb7080ac70580c8770d5b1db1a7222e31b374b7b1247ef09273b12fb6165823c",
+    "last_login_at": null
   }
 ]

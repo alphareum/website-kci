@@ -1,4 +1,5 @@
 import { FastifyInstance } from 'fastify';
+import { requireSession } from '../../middleware/require-session.js';
 import { PostsService, UpsertPostSchema } from './service.js';
 
 function parseIncludeDrafts(value: string | undefined) {
@@ -27,13 +28,13 @@ export async function postsRoutes(server: FastifyInstance) {
     return { post };
   });
 
-  server.post('/', async (request) => {
+  server.post('/', { preHandler: requireSession }, async (request) => {
     const payload = UpsertPostSchema.parse(request.body);
     const post = await service.upsertPost(payload);
     return { post };
   });
 
-  server.delete('/:id', async (request) => {
+  server.delete('/:id', { preHandler: requireSession }, async (request) => {
     const { id } = request.params as { id: string };
     await service.deletePost(Number(id));
     return { success: true };

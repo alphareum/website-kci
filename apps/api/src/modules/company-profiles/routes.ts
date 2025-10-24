@@ -1,4 +1,5 @@
 import { FastifyInstance } from 'fastify';
+import { requireSession } from '../../middleware/require-session.js';
 import {
   getAllCompanyProfiles,
   getCompanyProfileBySlug,
@@ -50,7 +51,7 @@ export async function companyProfilesRoutes(fastify: FastifyInstance) {
 
   // POST /api/admin/company-profiles - Create or update company profile (UPSERT logic)
   // CMS sends ID in body when editing, so we check for it
-  fastify.post('/admin/company-profiles', async (request, reply) => {
+  fastify.post('/admin/company-profiles', { preHandler: requireSession }, async (request, reply) => {
     try {
       const body = request.body as any;
 
@@ -90,7 +91,7 @@ export async function companyProfilesRoutes(fastify: FastifyInstance) {
   });
 
   // PUT /api/admin/company-profiles/:id - Update company profile (standard REST)
-  fastify.put('/admin/company-profiles/:id', async (request, reply) => {
+  fastify.put('/admin/company-profiles/:id', { preHandler: requireSession }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
       const numId = parseInt(id, 10);
@@ -119,7 +120,7 @@ export async function companyProfilesRoutes(fastify: FastifyInstance) {
   });
 
   // DELETE /api/admin/company-profiles/:id - Delete company profile
-  fastify.delete('/admin/company-profiles/:id', async (request, reply) => {
+  fastify.delete('/admin/company-profiles/:id', { preHandler: requireSession }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
       const numId = parseInt(id, 10);
