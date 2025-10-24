@@ -11,6 +11,22 @@ import { cleanupExpiredSessions } from '../lib/session-store.js';
 
 const uploadsPath = path.resolve(env.storage.dataDir, 'uploads');
 
+// CORS whitelist configuration
+const ALLOWED_ORIGINS = [
+  'https://komunitaschineseindonesia.com',
+  'https://www.komunitaschineseindonesia.com',
+];
+
+// Add development origins for local testing
+if (env.nodeEnv === 'development') {
+  ALLOWED_ORIGINS.push(
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:3001',
+  );
+}
+
 export async function buildServer() {
   const server = Fastify({
     logger: {
@@ -34,7 +50,20 @@ export async function buildServer() {
 
   await server.register(sensible);
   await server.register(cors, {
-    origin: true,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (same-origin, Postman, curl)
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+
+      // Check if origin is in whitelist
+      if (ALLOWED_ORIGINS.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} not allowed by CORS`), false);
+      }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   });
