@@ -19,6 +19,15 @@ function createEmptyProfile() {
     education: [],
     achievements: [],
     skills: [],
+    website: '',
+    social_media: {
+      instagram: '',
+      linkedin: '',
+      facebook: '',
+      twitter: '',
+      github: '',
+      youtube: '',
+    },
   };
 }
 
@@ -77,6 +86,15 @@ export default function ProfilesPage() {
       education: profile.education ?? [],
       achievements: profile.achievements ?? [],
       skills: profile.skills ?? [],
+      website: profile.website ?? '',
+      social_media: profile.social_media ?? {
+        instagram: '',
+        linkedin: '',
+        facebook: '',
+        twitter: '',
+        github: '',
+        youtube: '',
+      },
     });
     setEditingId(profile.id);
     setFormError('');
@@ -91,6 +109,16 @@ export default function ProfilesPage() {
 
   function updateField(field, value) {
     setDraft((previous) => ({ ...previous, [field]: value }));
+  }
+
+  function updateSocialMedia(platform, value) {
+    setDraft((previous) => ({
+      ...previous,
+      social_media: {
+        ...previous.social_media,
+        [platform]: value,
+      },
+    }));
   }
 
   function handleMediaSelect(item) {
@@ -206,6 +234,15 @@ export default function ProfilesPage() {
       education: draft.education,
       achievements: draft.achievements,
       skills: draft.skills,
+      website: draft.website || null,
+      social_media: {
+        instagram: draft.social_media?.instagram || null,
+        linkedin: draft.social_media?.linkedin || null,
+        facebook: draft.social_media?.facebook || null,
+        twitter: draft.social_media?.twitter || null,
+        github: draft.social_media?.github || null,
+        youtube: draft.social_media?.youtube || null,
+      },
     };
 
     try {
@@ -345,6 +382,90 @@ export default function ProfilesPage() {
                     value={draft.location}
                     onChange={(event) => updateField('location', event.target.value)}
                   />
+                </div>
+              </div>
+
+              {/* Website */}
+              <div className="input-group">
+                <label htmlFor="website">Website (optional)</label>
+                <input
+                  id="website"
+                  type="url"
+                  placeholder="https://example.com"
+                  value={draft.website}
+                  onChange={(event) => updateField('website', event.target.value)}
+                />
+                <span style={{ fontSize: '0.8rem', color: '#555' }}>
+                  Personal website or portfolio URL
+                </span>
+              </div>
+
+              {/* Social Media */}
+              <div className="input-group" style={{ borderTop: '2px solid #e5e7eb', paddingTop: '1.5rem' }}>
+                <label style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '0.75rem', display: 'block' }}>
+                  Social Media (all optional)
+                </label>
+                <div className="form-grid two-col">
+                  <div className="input-group">
+                    <label htmlFor="instagram">Instagram</label>
+                    <input
+                      id="instagram"
+                      type="text"
+                      placeholder="@username or full URL"
+                      value={draft.social_media?.instagram || ''}
+                      onChange={(event) => updateSocialMedia('instagram', event.target.value)}
+                    />
+                  </div>
+                  <div className="input-group">
+                    <label htmlFor="linkedin">LinkedIn</label>
+                    <input
+                      id="linkedin"
+                      type="url"
+                      placeholder="https://linkedin.com/in/username"
+                      value={draft.social_media?.linkedin || ''}
+                      onChange={(event) => updateSocialMedia('linkedin', event.target.value)}
+                    />
+                  </div>
+                  <div className="input-group">
+                    <label htmlFor="facebook">Facebook</label>
+                    <input
+                      id="facebook"
+                      type="url"
+                      placeholder="https://facebook.com/username"
+                      value={draft.social_media?.facebook || ''}
+                      onChange={(event) => updateSocialMedia('facebook', event.target.value)}
+                    />
+                  </div>
+                  <div className="input-group">
+                    <label htmlFor="twitter">Twitter/X</label>
+                    <input
+                      id="twitter"
+                      type="text"
+                      placeholder="@username or full URL"
+                      value={draft.social_media?.twitter || ''}
+                      onChange={(event) => updateSocialMedia('twitter', event.target.value)}
+                    />
+                  </div>
+                  <div className="input-group">
+                    <label htmlFor="github">GitHub</label>
+                    <input
+                      id="github"
+                      type="text"
+                      placeholder="@username or full URL"
+                      value={draft.social_media?.github || ''}
+                      onChange={(event) => updateSocialMedia('github', event.target.value)}
+                    />
+                  </div>
+                  <div className="input-group">
+                    <label htmlFor="youtube">YouTube</label>
+                    <input
+                      id="youtube"
+                      type="url"
+                      placeholder="https://youtube.com/@username"
+                      value={draft.social_media?.youtube || ''}
+                      onChange={(event) => updateSocialMedia('youtube', event.target.value)}
+                    />
+                  </div>
                 </div>
               </div>
 

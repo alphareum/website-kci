@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { clearSession, getSession } from '../../lib/session';
+import { apiPost } from '../../lib/api';
 
 const NAV_ITEMS = [
   { href: '/admin/posts', label: 'Posts' },
@@ -32,8 +33,17 @@ export default function AdminLayout({ children }) {
     }
   }, [router]);
 
-  function signOut() {
+  async function signOut() {
+    try {
+      // Call API to destroy server session and clear HttpOnly cookie
+      await apiPost('/auth/logout', {});
+    } catch (err) {
+      // Ignore errors - we'll clear local session anyway
+      console.warn('Logout API call failed', err);
+    }
+    // Clear local session data
     clearSession();
+    // Redirect to login
     router.replace('/login');
   }
 

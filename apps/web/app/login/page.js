@@ -24,8 +24,11 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
     try {
-      const admin = await apiPost('/auth/login', { email, password });
-      createSession(admin);
+      // API now returns { user, session } and sets HttpOnly cookie
+      const response = await apiPost('/auth/login', { email, password });
+      // Store user info in localStorage for display purposes only
+      // Actual authentication is handled by HttpOnly cookie
+      createSession(response.user);
       router.replace('/admin');
     } catch (err) {
       setError(err.message || 'Login failed');

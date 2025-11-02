@@ -39,6 +39,15 @@ export const ProfileSchema = z.object({
   education: z.array(EducationItemSchema),
   achievements: z.array(AchievementItemSchema),
   skills: z.array(z.string()),
+  website: z.union([z.string().url(), z.literal('')]).transform(val => val || null).optional().nullable(),
+  social_media: z.object({
+    instagram: z.string().optional().nullable(),
+    linkedin: z.string().optional().nullable(),
+    facebook: z.string().optional().nullable(),
+    twitter: z.string().optional().nullable(),
+    github: z.string().optional().nullable(),
+    youtube: z.string().optional().nullable(),
+  }).optional().nullable(),
 });
 
 export type Profile = z.infer<typeof ProfileSchema>;
@@ -77,6 +86,15 @@ interface ProfileRecord {
     year: string;
   }>;
   skills: string[];
+  website?: string | null;
+  social_media?: {
+    instagram?: string | null;
+    linkedin?: string | null;
+    facebook?: string | null;
+    twitter?: string | null;
+    github?: string | null;
+    youtube?: string | null;
+  } | null;
 }
 
 interface ProfilesDB {
